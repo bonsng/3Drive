@@ -1,4 +1,4 @@
-import type { PositionedNode } from "@/lib/positioning";
+import type { PositionedNode } from '@/lib/positioning';
 
 export function getDescendantIds(
   nodeId: number,
