@@ -1,7 +1,3 @@
-<p align="center">
-  <img src="docs/images/hero-banner.png" alt="3Drive Hero Banner" width="100%" />
-</p>
-
 <h1 align="center">3Drive</h1>
 <h3 align="center">3D Based Cloud Storage Service</h3>
 
@@ -10,41 +6,12 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript" />
-  <img src="https://img.shields.io/badge/React_19-61DAFB?style=for-the-badge&logo=react&logoColor=black" alt="React" />
-  <img src="https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white" alt="Vite" />
-  <img src="https://img.shields.io/badge/Three.js-000000?style=for-the-badge&logo=threedotjs&logoColor=white" alt="Three.js" />
-  <img src="https://img.shields.io/badge/Zustand-000000?style=for-the-badge&logo=react&logoColor=white" alt="Zustand" />
-  <img src="https://img.shields.io/badge/Tailwind_CSS_4-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white" alt="Tailwind CSS" />
-</p>
-
-<p align="center">
-  <a href="#-demo">Demo</a> •
   <a href="#-key-features">Features</a> •
   <a href="#%EF%B8%8F-architecture">Architecture</a> •
   <a href="#-getting-started">Getting Started</a> •
   <a href="#-tech-stack">Tech Stack</a> •
   <a href="#-migration">Migration</a>
 </p>
-
----
-
-## Demo
-
-<table>
-  <tr>
-    <td align="center" width="50%">
-      <img src="docs/images/screenshot-explorer.png" alt="3D File Explorer" width="100%" />
-      <br />
-      <sub><b>3D File Explorer</b> — Navigate your files in an interactive 3D space</sub>
-    </td>
-    <td align="center" width="50%">
-      <img src="docs/images/screenshot-landing.png" alt="Landing Page" width="100%" />
-      <br />
-      <sub><b>Landing Page</b> — Clean, immersive onboarding experience</sub>
-    </td>
-  </tr>
-</table>
 
 ---
 
@@ -102,8 +69,8 @@ graph LR
 **React ↔ Three.js Separation**
 
 ```
-React (UI Layer)          ThreeCanvas.tsx (Bridge)          Three.js (3D Layer)
-├── Zustand Stores   ←→   useEffect init/cleanup    ←→    ├── engine.ts
+React (UI Layer)          ThreeCanvas.tsx (Bridge)         Three.js (3D Layer)
+├── Zustand Stores   ←→   useEffect init/cleanup    ←→     ├── engine.ts
 ├── Modal Components                                       ├── raycaster.ts
 └── Search/Menu                                            └── objects/
 ```
@@ -133,15 +100,15 @@ open http://localhost:5173
 
 ## Tech Stack
 
-| Category | Technologies |
-| --- | --- |
-| **Framework** | Vite, React 19 |
-| **3D Rendering** | Three.js (WebGPURenderer, WebGL fallback) |
-| **State Management** | Zustand |
-| **Routing** | React Router v7 |
-| **Animation** | GSAP (camera), Framer Motion (UI) |
-| **Styling** | Tailwind CSS 4 |
-| **Language** | TypeScript 5 |
+| Category             | Technologies                              |
+| -------------------- | ----------------------------------------- |
+| **Framework**        | Vite, React 19                            |
+| **3D Rendering**     | Three.js (WebGPURenderer, WebGL fallback) |
+| **State Management** | Zustand                                   |
+| **Routing**          | React Router v7                           |
+| **Animation**        | GSAP (camera), Framer Motion (UI)         |
+| **Styling**          | Tailwind CSS 4                            |
+| **Language**         | TypeScript 5                              |
 
 ---
 
@@ -151,14 +118,14 @@ This project is a ground-up rewrite of the [original 3Drive](../3Drive-mock/) pr
 
 ### What Changed
 
-| Before | After |
-| --- | --- |
-| Next.js 15 (App Router) | Vite + React 19 SPA |
-| React Three Fiber | Native Three.js (WebGPURenderer) |
-| React Context (6 providers) | Zustand (2 stores) |
-| next/navigation | React Router v7 |
-| @react-three/drei | three/addons (OrbitControls, GLTFLoader) |
-| @react-three/postprocessing | Three.js TSL node-based postprocessing |
+| Before                      | After                                    |
+| --------------------------- | ---------------------------------------- |
+| Next.js 15 (App Router)     | Vite + React 19 SPA                      |
+| React Three Fiber           | Native Three.js (WebGPURenderer)         |
+| React Context (6 providers) | Zustand (2 stores)                       |
+| next/navigation             | React Router v7                          |
+| @react-three/drei           | three/addons (OrbitControls, GLTFLoader) |
+| @react-three/postprocessing | Three.js TSL node-based postprocessing   |
 
 ### Why
 
@@ -170,6 +137,7 @@ This project is a ground-up rewrite of the [original 3Drive](../3Drive-mock/) pr
 ### What Was Kept
 
 Core logic that doesn't depend on the rendering framework was reused as-is:
+
 - File tree data structures and traversal (`tree-utils.ts`)
 - 3D positioning algorithms (`positioning.ts`)
 - File type mappings (`extension.ts`)
