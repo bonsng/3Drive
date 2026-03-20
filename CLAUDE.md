@@ -57,6 +57,7 @@ bun run lint   # ESLint
 
 ## 코드 컨벤션
 
+- **LSP 우선 사용**: 타입 추론, 심볼 정의 추적, 참조 검색, 프로젝트 구조 파악 시 반드시 LSP 도구를 먼저 사용. Grep/Glob으로 텍스트 검색하기 전에 `goToDefinition`, `findReferences`, `hover`, `documentSymbol` 등을 활용할 것.
 - `@/*` path alias 사용 예정 (`src/` 매핑)
 - Three.js import: `three/webgpu` (WebGPURenderer), `three/addons` (OrbitControls, GLTFLoader 등)
 - Three.js 메모리 관리: geometry/material/texture는 반드시 `dispose()` 호출
