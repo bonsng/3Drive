@@ -1,11 +1,5 @@
 import * as THREE from 'three';
-import type { Node } from '@/lib/sample-tree';
-
-export interface PositionedNode extends Node {
-  position: [number, number, number];
-  depth: number;
-  parentPosition?: [number, number, number];
-}
+import type { Node, PositionedNode } from '@/types/node';
 
 export function assignPositions(
   tree: Node,
