@@ -1,5 +1,5 @@
-import * as THREE from "three";
-import type { Node } from "@/lib/sample-tree";
+import * as THREE from 'three';
+import type { Node } from '@/lib/sample-tree';
 
 export interface PositionedNode extends Node {
   position: [number, number, number];
@@ -30,7 +30,7 @@ export function assignPositions(
       position = [0, 0, 0];
     } else if (depth === 1) {
       if (childIndex === undefined || siblingCount === undefined)
-        throw new Error("Missing child indexing for spherical layout");
+        throw new Error('Missing child indexing for spherical layout');
 
       const radius = baseRadius;
 
@@ -46,18 +46,13 @@ export function assignPositions(
 
       position = [x * radius, y * radius, z * radius];
     } else {
-      if (!parentPosition || !grandParentPosition)
-        throw new Error("Missing position data");
+      if (!parentPosition || !grandParentPosition) throw new Error('Missing position data');
       if (childIndex === undefined || siblingCount === undefined)
-        throw new Error("Missing child indexing for ring layout");
+        throw new Error('Missing child indexing for ring layout');
 
       const parentVec = new THREE.Vector3(...parentPosition);
       const grandVec = new THREE.Vector3(...grandParentPosition);
-      const dir = parentVec
-        .clone()
-        .sub(grandVec)
-        .normalize()
-        .multiplyScalar(radiusStep);
+      const dir = parentVec.clone().sub(grandVec).normalize().multiplyScalar(radiusStep);
       const center = parentVec.clone().add(dir);
 
       // compute even angle spacing on ring
@@ -66,9 +61,7 @@ export function assignPositions(
       const up = new THREE.Vector3(0, 1, 0);
       if (Math.abs(dir.dot(up)) > 0.9) up.set(1, 0, 0);
       const tangent1 = new THREE.Vector3().crossVectors(dir, up).normalize();
-      const tangent2 = new THREE.Vector3()
-        .crossVectors(dir, tangent1)
-        .normalize();
+      const tangent2 = new THREE.Vector3().crossVectors(dir, tangent1).normalize();
 
       const offset = tangent1
         .multiplyScalar(Math.cos(angle) * r)

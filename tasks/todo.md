@@ -12,6 +12,12 @@
 - [x] `public/` 정적 파일 복사 (models, icon-tex, videos, 배경)
 - [x] `lib/` 유틸리티 파일 복사 (sample-tree, tree-utils, positioning, extension, angles, guides)
 
+## Phase 1.5: GitHub 레포 설정
+
+- [x] GitHub Actions CI 워크플로우 생성 (`.github/workflows/ci.yml` — lint, type-check, build)
+- [x] Node.js 24 런타임 강제 설정 (`FORCE_JAVASCRIPT_ACTIONS_TO_NODE24`)
+- [x] Branch protection ruleset 적용 (main 직접 push 차단, PR 필수, CI 통과 필수)
+
 ## Phase 2: 기본 구조 구축
 
 - [ ] React Router 라우트 설정 (`/`, `/drive`)
