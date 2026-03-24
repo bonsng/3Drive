@@ -66,6 +66,14 @@ bun test:run   # 테스트 (단일 실행)
 - Three.js 메모리 관리: geometry/material/texture는 반드시 `dispose()` 호출
 - 모델 캐싱: GLTFLoader로 같은 모델 반복 로드하지 않도록 캐시 구현
 
+### 테스트 컨벤션
+
+- **위치**: `src/<module>/__tests__/<module-name>.test.ts`
+- **파일 상단 JSDoc**: 테스트 대상 함수별로 검증 항목을 번호 목록으로 요약
+- **헬퍼 팩토리**: `makeXxx()` 함수로 테스트용 객체 생성 (필수 필드만 채우고 `Partial` overrides)
+- **describe/it 구조**: `describe('함수명')` > `it('검증 내용')`, `it.each`로 반복 케이스 처리
+- **실행**: `bun run test:run <path>` (단일 실행), `bun run test` (watch 모드)
+
 ---
 
 ## 핵심 원칙
