@@ -23,13 +23,13 @@
   - [x] `positioning.ts` — 3D 좌표 배치 로직
   - [x] `extension.ts` — 파일 확장자 → 타입 매핑
   - [x] `angles.ts` — 앵글 프리셋 계산
-- [ ] MSW 설정 (`src/mocks/`)
-  - [ ] `handlers.ts` — API 핸들러 정의
-  - [ ] `browser.ts` — 브라우저 환경 워커 설정
-  - [ ] `server.ts` — 테스트 환경 서버 설정
-- [ ] 목 데이터 설정
-  - [ ] `src/mocks/data/` — 파일 트리, 유저 등 목 데이터 정의
-  - [ ] `sample-tree.ts` 기반 테스트용 fixture 작성
+- [x] MSW 설정 (`src/mocks/`)
+  - [x] `handlers.ts` — API 핸들러 정의
+  - [x] `browser.ts` — 브라우저 환경 워커 설정
+  - [x] `server.ts` — 테스트 환경 서버 설정
+- [x] 목 데이터 설정
+  - [x] `src/mocks/data/` — 파일 트리, 유저 등 목 데이터 정의
+  - [x] `sample-tree.ts` 기반 테스트용 fixture 작성
 
 ## Phase 2: 기본 구조 구축
 

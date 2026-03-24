@@ -8,6 +8,7 @@
  */
 
 import { assignPositions } from '../positioning';
+import { sampleTree } from './fixtures/sample-data';
 import type { Node } from '@/types/node';
 
 function makeTree(overrides: Partial<Node> = {}): Node {
@@ -124,5 +125,36 @@ describe('assignPositions', () => {
     const root = map.get(1)!;
     expect(root.entryTime).toBe(0);
     expect(root.exitTime).toBe(1);
+  });
+
+  describe('sampleTree integration', () => {
+    const map = assignPositions(sampleTree);
+
+    it('positions all 37 nodes', () => {
+      expect(map.size).toBe(37);
+    });
+
+    it('assigns unique positions to every node', () => {
+      const positions = new Set([...map.values()].map((n) => n.position.join(',')));
+      expect(positions.size).toBe(37);
+    });
+
+    it('assigns correct depth for deeply nested nodes', () => {
+      expect(map.get(1)!.depth).toBe(0); // root
+      expect(map.get(2)!.depth).toBe(1); // documents
+      expect(map.get(5)!.depth).toBe(2); // projects
+      expect(map.get(8)!.depth).toBe(3); // archive
+      expect(map.get(321)!.depth).toBe(4); // archive_sub
+      expect(map.get(401)!.depth).toBe(5); // archive_sub_sub
+    });
+
+    it('satisfies Euler Tour invariant for all parent-child pairs', () => {
+      for (const node of map.values()) {
+        if (node.parentId === null) continue;
+        const parent = map.get(node.parentId)!;
+        expect(parent.entryTime).toBeLessThan(node.entryTime);
+        expect(node.exitTime).toBeLessThan(parent.exitTime);
+      }
+    });
   });
 });
