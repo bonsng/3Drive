@@ -23,13 +23,15 @@ function renderModal(modalType: ModalType, props: ModalPropsMap[ModalType] | nul
 }
 
 export function ModalRenderer() {
-  const { isOpen, modalType, props, close } = useModalStore();
+  const { isOpen, modalType, props, close, reset } = useModalStore();
 
   if (!modalType) return null;
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && close()}>
-      <DialogContent>{renderModal(modalType, props)}</DialogContent>
+      <DialogContent onAnimationEnd={() => !isOpen && reset()}>
+        {renderModal(modalType, props)}
+      </DialogContent>
     </Dialog>
   );
 }
