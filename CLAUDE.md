@@ -10,6 +10,7 @@
 - **라우팅**: React Router v7
 - **스타일링**: Tailwind CSS 4
 - **애니메이션**: GSAP (카메라), Framer Motion (UI)
+- **테스트**: Vitest (globals, node environment)
 - **패키지 매니저**: bun
 
 ## 프로젝트 구조
@@ -43,6 +44,8 @@ src/
 bun dev        # 개발 서버
 bun run build  # 빌드 (tsc + vite build)
 bun run lint   # ESLint
+bun test       # 테스트 (watch 모드)
+bun test:run   # 테스트 (단일 실행)
 ```
 
 ## 마이그레이션
@@ -99,7 +102,8 @@ bun run lint   # ESLint
 - 작동 증명 없이 작업 완료 처리 금지
 - 관련 있을 때 main 브랜치와 변경사항 diff 비교
 - "시니어 엔지니어가 이걸 승인할까?" 자문
-- 테스트 실행, 로그 확인, 정확성 검증
+- 테스트 실행(`bun test:run`), 로그 확인, 정확성 검증
+- 관련 테스트가 있으면 반드시 통과 확인 후 완료 처리
 
 ### 5. 우아함 추구 (균형 잡힌)
 

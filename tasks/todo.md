@@ -17,7 +17,7 @@
 
 ## Phase 1.5: 테스트 인프라 및 비즈니스 로직 검증
 
-- [ ] Vitest 설정 (`vitest.config.ts`, path alias 연동)
+- [x] Vitest 설정 (`vitest.config.ts`, path alias 연동)
 - [ ] 비즈니스 로직 유닛 테스트 작성
   - [ ] `tree-utils.ts` — 트리 탐색, 노드 검색, 경로 계산
   - [ ] `positioning.ts` — 3D 좌표 배치 로직
