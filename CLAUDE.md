@@ -10,6 +10,7 @@
 - **라우팅**: React Router v7
 - **스타일링**: Tailwind CSS 4
 - **애니메이션**: GSAP (카메라), Framer Motion (UI)
+- **테스트**: Vitest (globals, node environment)
 - **패키지 매니저**: bun
 
 ## 프로젝트 구조
@@ -43,6 +44,8 @@ src/
 bun dev        # 개발 서버
 bun run build  # 빌드 (tsc + vite build)
 bun run lint   # ESLint
+bun test       # 테스트 (watch 모드)
+bun test:run   # 테스트 (단일 실행)
 ```
 
 ## 마이그레이션
@@ -57,10 +60,19 @@ bun run lint   # ESLint
 
 ## 코드 컨벤션
 
+- **LSP 우선 사용**: 타입 추론, 심볼 정의 추적, 참조 검색, 프로젝트 구조 파악 시 반드시 LSP 도구를 먼저 사용. Grep/Glob으로 텍스트 검색하기 전에 `goToDefinition`, `findReferences`, `hover`, `documentSymbol` 등을 활용할 것.
 - `@/*` path alias 사용 예정 (`src/` 매핑)
 - Three.js import: `three/webgpu` (WebGPURenderer), `three/addons` (OrbitControls, GLTFLoader 등)
 - Three.js 메모리 관리: geometry/material/texture는 반드시 `dispose()` 호출
 - 모델 캐싱: GLTFLoader로 같은 모델 반복 로드하지 않도록 캐시 구현
+
+### 테스트 컨벤션
+
+- **위치**: `src/<module>/__tests__/<module-name>.test.ts`
+- **파일 상단 JSDoc**: 테스트 대상 함수별로 검증 항목을 번호 목록으로 요약
+- **헬퍼 팩토리**: `makeXxx()` 함수로 테스트용 객체 생성 (필수 필드만 채우고 `Partial` overrides)
+- **describe/it 구조**: `describe('함수명')` > `it('검증 내용')`, `it.each`로 반복 케이스 처리
+- **실행**: `bun run test:run <path>` (단일 실행), `bun run test` (watch 모드)
 
 ---
 
@@ -98,7 +110,8 @@ bun run lint   # ESLint
 - 작동 증명 없이 작업 완료 처리 금지
 - 관련 있을 때 main 브랜치와 변경사항 diff 비교
 - "시니어 엔지니어가 이걸 승인할까?" 자문
-- 테스트 실행, 로그 확인, 정확성 검증
+- 테스트 실행(`bun test:run`), 로그 확인, 정확성 검증
+- 관련 테스트가 있으면 반드시 통과 확인 후 완료 처리
 
 ### 5. 우아함 추구 (균형 잡힌)
 

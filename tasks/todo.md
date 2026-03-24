@@ -11,12 +11,25 @@
 - [x] `@/*` path alias 설정 (vite.config.ts, tsconfig.json)
 - [x] `public/` 정적 파일 복사 (models, icon-tex, videos, 배경)
 - [x] `lib/` 유틸리티 파일 복사 (sample-tree, tree-utils, positioning, extension, angles, guides)
-
-## Phase 1.5: GitHub 레포 설정
-
 - [x] GitHub Actions CI 워크플로우 생성 (`.github/workflows/ci.yml` — lint, type-check, build)
 - [x] Node.js 24 런타임 강제 설정 (`FORCE_JAVASCRIPT_ACTIONS_TO_NODE24`)
 - [x] Branch protection ruleset 적용 (main 직접 push 차단, PR 필수, CI 통과 필수)
+
+## Phase 1.5: 테스트 인프라 및 비즈니스 로직 검증
+
+- [x] Vitest 설정 (`vitest.config.ts`, path alias 연동)
+- [x] 비즈니스 로직 유닛 테스트 작성
+  - [x] `tree-utils.ts` — 트리 탐색, 노드 검색, 경로 계산
+  - [x] `positioning.ts` — 3D 좌표 배치 로직
+  - [x] `extension.ts` — 파일 확장자 → 타입 매핑
+  - [x] `angles.ts` — 앵글 프리셋 계산
+- [ ] MSW 설정 (`src/mocks/`)
+  - [ ] `handlers.ts` — API 핸들러 정의
+  - [ ] `browser.ts` — 브라우저 환경 워커 설정
+  - [ ] `server.ts` — 테스트 환경 서버 설정
+- [ ] 목 데이터 설정
+  - [ ] `src/mocks/data/` — 파일 트리, 유저 등 목 데이터 정의
+  - [ ] `sample-tree.ts` 기반 테스트용 fixture 작성
 
 ## Phase 2: 기본 구조 구축
 
@@ -64,6 +77,8 @@
 
 ## Phase 7: 마무리
 
+- [ ] 백엔드 API 응답에서 trash를 별도 필드로 분리 (`{ root: BackendNode, trash: BackendNode[] }`)
+  - 프론트에서 `'휴지통'` 매직 스트링 검색 제거, `processBackendTree` 단순화
 - [ ] 휴지통 3D 씬 (trash-zone 오브젝트 + 삭제/복원)
 - [ ] 포스트프로세싱 (TSL 노드 기반, 필요한 경우만)
 - [ ] 반응형 처리 (resize → camera.aspect + renderer.setSize)

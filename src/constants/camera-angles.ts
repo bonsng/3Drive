@@ -1,13 +1,4 @@
-export type Point = {
-  x: number;
-  y: number;
-  z: number;
-};
-
-export type Angle = {
-  position: Point;
-  target: Point;
-};
+import type { Angle } from '@/types/camera';
 
 export const angles: Angle[] = [
   // default
@@ -30,5 +21,3 @@ export const angles: Angle[] = [
   // custom
   { position: { x: -10.6, y: 0, z: 0 }, target: { x: 0, y: 0, z: 0 } },
 ];
-
-// { x: 20, y: 15, z: 50 },
