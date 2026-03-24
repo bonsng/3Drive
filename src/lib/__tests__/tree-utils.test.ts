@@ -9,6 +9,8 @@
  */
 
 import { getDescendantIds } from '../tree-utils';
+import { assignPositions } from '../positioning';
+import { sampleTree } from './fixtures/sample-data';
 import type { PositionedNode } from '@/types/node';
 
 function makeNode(
@@ -109,5 +111,38 @@ describe('getDescendantIds', () => {
   it('root node returns all other nodes', () => {
     const result = getDescendantIds(1, nodeMap);
     expect(result.size).toBe(6);
+  });
+
+  describe('sampleTree integration', () => {
+    const sampleMap = assignPositions(sampleTree);
+
+    it('root returns all 36 descendants', () => {
+      const result = getDescendantIds(1, sampleMap);
+      expect(result.size).toBe(36);
+      expect(result).not.toContain(1);
+    });
+
+    it('documents folder returns 15 descendants', () => {
+      // documents(2) → resume(3), cover_letter(4), projects(5), project1(6),
+      // project2(7), archive(8), old_project1(9), old_project2(10),
+      // archive_sub(321), archive_sub_sub(401), archive5(777),
+      // invoices(11), invoice_jan(12), invoice_feb(13), invoice_mar(14)
+      const result = getDescendantIds(2, sampleMap);
+      expect(result.size).toBe(15);
+      expect(result).toContain(777); // deepest node
+    });
+
+    it('leaf node returns empty set', () => {
+      const result = getDescendantIds(33, sampleMap); // todo.txt
+      expect(result.size).toBe(0);
+    });
+
+    it('subtree does not leak into sibling subtrees', () => {
+      const imagesDescendants = getDescendantIds(15, sampleMap);
+      // images 하위에 documents 노드가 포함되면 안 됨
+      expect(imagesDescendants).not.toContain(2);
+      expect(imagesDescendants).not.toContain(3);
+      expect(imagesDescendants.size).toBe(5); // 16,17,18,19,20
+    });
   });
 });

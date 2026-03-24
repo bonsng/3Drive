@@ -12,6 +12,7 @@
 
 import type { BackendNode } from '@/types/node';
 import { normalizeBackendTree, processBackendResponse } from '../tree-transform';
+import { mockBackendResponse } from '@/mocks/data';
 
 const makeBackendNode = (overrides: Partial<BackendNode> = {}): BackendNode => ({
   type: 'folder',
@@ -109,5 +110,44 @@ describe('processBackendResponse', () => {
 
     expect(treeData.name).toBe('root');
     expect(trashData).toEqual([]);
+  });
+
+  describe('mockBackendResponse integration', () => {
+    const { treeData, trashData } = processBackendResponse(mockBackendResponse);
+
+    it('normalizes root with unified id field', () => {
+      expect(treeData.id).toBe(1);
+      expect(treeData.name).toBe('root');
+    });
+
+    it('normalizes depth-8 nested nodes', () => {
+      // root → documents → projects → archive → 2023 → attachments → raw → backup → legacy
+      const documents = treeData.children!.find((c) => c.name === 'documents')!;
+      const projects = documents.children!.find((c) => c.name === 'projects')!;
+      const archive = projects.children!.find((c) => c.name === 'archive')!;
+      const y2023 = archive.children!.find((c) => c.name === '2023')!;
+      const attachments = y2023.children!.find((c) => c.name === 'attachments')!;
+      const raw = attachments.children!.find((c) => c.name === 'raw')!;
+      const backup = raw.children!.find((c) => c.name === 'backup')!;
+      const legacy = backup.children!.find((c) => c.name === 'legacy')!;
+      expect(legacy.id).toBe(54);
+      expect(legacy.children).toHaveLength(2);
+    });
+
+    it('normalizes file nodes with fileId as id', () => {
+      const documents = treeData.children!.find((c) => c.name === 'documents')!;
+      const resume = documents.children!.find((c) => c.name === 'resume.pdf')!;
+      expect(resume.id).toBe(3);
+      expect(resume.type).toBe('file');
+    });
+
+    it('normalizes trash items including nested folder', () => {
+      expect(trashData).toHaveLength(7);
+
+      const oldWorkspace = trashData.find((t) => t.name === 'old_workspace')!;
+      expect(oldWorkspace.children).toHaveLength(3);
+      const attachments = oldWorkspace.children!.find((c) => c.name === 'attachments')!;
+      expect(attachments.children).toHaveLength(2);
+    });
   });
 });
