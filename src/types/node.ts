@@ -26,8 +26,12 @@ export interface BackendResponse {
   trash: BackendNode[];
 }
 
+import type { Vec3 } from '@/lib/positioning.types';
+
 export interface PositionedNode extends Node {
-  position: [number, number, number];
+  position: Vec3;
   depth: number;
-  parentPosition?: [number, number, number];
+  parentPosition?: Vec3;
+  entryTime: number;
+  exitTime: number;
 }
