@@ -33,7 +33,7 @@
 
 ## Phase 2: 기본 구조 구축
 
-- [ ] React Router 라우트 설정 (`/`, `/drive`)
+- [x] React Router 라우트 설정 (`/`, `/drive`)
 - [ ] App.tsx 레이아웃 (GlobalNav, Toaster)
 - [ ] Zustand 스토어: `modal-store.ts` (열기/닫기, 타입, props)
 - [ ] Zustand 스토어: `ui-store.ts` (사이드바, 검색, 컨텍스트 메뉴, 로딩, 배경)
