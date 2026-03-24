@@ -33,16 +33,17 @@
 
 ## Phase 2: 기본 구조 구축
 
-- [ ] React Router 라우트 설정 (`/`, `/drive`)
-- [ ] App.tsx 레이아웃 (GlobalNav, Toaster)
-- [ ] Zustand 스토어: `modal-store.ts` (열기/닫기, 타입, props)
+- [x] React Router 라우트 설정 (`/`, `/drive`)
+- [ ] App.tsx 레이아웃 (GlobalNav)
+- [x] Toaster 설정 (shadcn + sonner)
+- [x] Zustand 스토어: `modal-store.ts` (열기/닫기, 타입, props)
 - [ ] Zustand 스토어: `ui-store.ts` (사이드바, 검색, 컨텍스트 메뉴, 로딩, 배경)
-- [ ] 모달 시스템 구축 (ModalRenderer + 개별 모달 컴포넌트)
-  - [ ] FileModal
-  - [ ] UploadModal
-  - [ ] CreateFolderModal
-  - [ ] GuideModal
-  - [ ] SettingModal
+- [x] 모달 시스템 구축 (ModalRenderer + 개별 모달 컴포넌트, shadcn Dialog)
+  - [x] FileModal (스텁)
+  - [x] UploadModal (스텁)
+  - [x] CreateFolderModal (스텁)
+  - [x] GuideModal (스텁)
+  - [x] SettingModal (스텁)
 
 ## Phase 3: Three.js 씬 기본 구축 (WebGPURenderer)
 
