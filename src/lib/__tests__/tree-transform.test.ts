@@ -4,14 +4,14 @@
  * 2. Field mapping: name, type, parentId, createdAt, updatedAt
  * 3. Children normalization: null/undefined → empty array, recursive conversion
  *
- * processBackendTree
- * 1. Trash separation: '휴지통' node removed from root, its children returned as trashData
- * 2. No trash node: trashData is empty array, treeData unchanged
- * 3. Empty trash: trash node exists but has no children
+ * processBackendResponse
+ * 1. Normalizes root tree via normalizeBackendTree
+ * 2. Normalizes each trash node independently
+ * 3. Empty trash array returns empty trashData
  */
 
 import type { BackendNode } from '@/types/node';
-import { normalizeBackendTree, processBackendTree } from '../tree-transform';
+import { normalizeBackendTree, processBackendResponse } from '../tree-transform';
 
 const makeBackendNode = (overrides: Partial<BackendNode> = {}): BackendNode => ({
   type: 'folder',
@@ -78,48 +78,36 @@ describe('normalizeBackendTree', () => {
   });
 });
 
-describe('processBackendTree', () => {
-  it('should separate trash node from root children', () => {
-    const tree = makeBackendNode({
-      children: [
-        makeBackendNode({ folderId: 2, name: '문서' }),
-        makeBackendNode({
-          folderId: 3,
-          name: '휴지통',
-          children: [
-            makeBackendNode({ folderId: null, fileId: 4, name: 'deleted.txt', type: 'file' }),
-          ],
-        }),
-      ],
-    });
+describe('processBackendResponse', () => {
+  it('should normalize root and trash separately', () => {
+    const response = {
+      root: makeBackendNode({
+        folderId: 1,
+        name: 'root',
+        children: [makeBackendNode({ folderId: 2, name: '문서' })],
+      }),
+      trash: [makeBackendNode({ folderId: null, fileId: 4, name: 'deleted.txt', type: 'file' })],
+    };
 
-    const { treeData, trashData } = processBackendTree(tree);
+    const { treeData, trashData } = processBackendResponse(response);
 
+    expect(treeData.name).toBe('root');
     expect(treeData.children).toHaveLength(1);
     expect(treeData.children![0].name).toBe('문서');
     expect(trashData).toHaveLength(1);
+    expect(trashData[0].id).toBe(4);
     expect(trashData[0].name).toBe('deleted.txt');
   });
 
-  it('should return empty trashData when no trash node exists', () => {
-    const tree = makeBackendNode({
-      children: [makeBackendNode({ folderId: 2, name: '문서' })],
-    });
+  it('should return empty trashData when trash array is empty', () => {
+    const response = {
+      root: makeBackendNode({ folderId: 1, name: 'root' }),
+      trash: [],
+    };
 
-    const { treeData, trashData } = processBackendTree(tree);
+    const { treeData, trashData } = processBackendResponse(response);
 
-    expect(treeData.children).toHaveLength(1);
-    expect(trashData).toEqual([]);
-  });
-
-  it('should return empty trashData when trash node has no children', () => {
-    const tree = makeBackendNode({
-      children: [makeBackendNode({ folderId: 3, name: '휴지통', children: null })],
-    });
-
-    const { treeData, trashData } = processBackendTree(tree);
-
-    expect(treeData.children).toHaveLength(0);
+    expect(treeData.name).toBe('root');
     expect(trashData).toEqual([]);
   });
 });

@@ -1,4 +1,4 @@
-import type { BackendNode, Node } from '@/types/node';
+import type { BackendNode, BackendResponse, Node } from '@/types/node';
 
 export const normalizeBackendTree = (rawNode: BackendNode): Node => {
   // Ensure id is never null: fallback to -1 if both folderId and fileId are null
@@ -15,18 +15,11 @@ export const normalizeBackendTree = (rawNode: BackendNode): Node => {
   };
 };
 
-export const processBackendTree = (rawTree: BackendNode): { treeData: Node; trashData: Node[] } => {
-  const normalizedRoot = normalizeBackendTree(rawTree);
-  const trashNodeIndex = normalizedRoot.children?.findIndex((n) => n.name === '휴지통');
-
-  let trashData: Node[] = [];
-  if (trashNodeIndex !== -1 && normalizedRoot.children) {
-    const [trashNode] = normalizedRoot.children.splice(trashNodeIndex ?? 0, 1);
-    trashData = trashNode.children || [];
-  }
-
+export const processBackendResponse = (
+  response: BackendResponse,
+): { treeData: Node; trashData: Node[] } => {
   return {
-    treeData: normalizedRoot,
-    trashData,
+    treeData: normalizeBackendTree(response.root),
+    trashData: response.trash.map(normalizeBackendTree),
   };
 };

@@ -78,6 +78,8 @@
 
 ## Phase 7: 마무리
 
+- [ ] 백엔드 API 응답에서 trash를 별도 필드로 분리 (`{ root: BackendNode, trash: BackendNode[] }`)
+  - 프론트에서 `'휴지통'` 매직 스트링 검색 제거, `processBackendTree` 단순화
 - [ ] 휴지통 3D 씬 (trash-zone 오브젝트 + 삭제/복원)
 - [ ] 포스트프로세싱 (TSL 노드 기반, 필요한 경우만)
 - [ ] 반응형 처리 (resize → camera.aspect + renderer.setSize)

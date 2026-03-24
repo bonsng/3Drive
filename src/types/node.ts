@@ -21,6 +21,11 @@ export interface BackendNode {
   children?: BackendNode[] | null;
 }
 
+export interface BackendResponse {
+  root: BackendNode;
+  trash: BackendNode[];
+}
+
 export interface PositionedNode extends Node {
   position: [number, number, number];
   depth: number;
