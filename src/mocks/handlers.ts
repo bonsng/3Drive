@@ -1,6 +1,8 @@
+import { http, HttpResponse } from 'msw';
+import { mockBackendResponse } from './data';
+
 export const handlers = [
-  // 예시: 파일 트리 API
-  // http.get('/api/files', () => {
-  //   return HttpResponse.json({ root: mockTree, trash: [] });
-  // }),
+  http.get('/api/files', () => {
+    return HttpResponse.json(mockBackendResponse);
+  }),
 ];
