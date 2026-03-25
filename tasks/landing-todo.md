@@ -6,12 +6,12 @@
 
 - [x] GSAP 설치 (`bun add gsap`)
 - [ ] `src/pages/landing/` 디렉토리 구조 생성
-- [ ] `three/core/landing-scene.ts` — WebGPURenderer + Scene + Camera 초기화
-  - [ ] async `renderer.init()` 처리
-  - [ ] `renderer.setAnimationLoop()` 설정
-  - [ ] resize 핸들러
-  - [ ] `init(canvas)` / `dispose()` export
-- [ ] `three/core/scene-state.ts` — sceneState plain object + 타입 정의
+- [x] `three/core/landing-scene.ts` — `createLandingScene(canvas)` 팩토리 함수
+  - [x] WebGPURenderer + Scene + PerspectiveCamera 초기화
+  - [x] `renderer.setAnimationLoop()` 설정
+  - [x] resize 핸들러 (rAF 디바운스)
+  - [x] `{ init, dispose, scene, camera, renderer }` 반환
+- [x] `three/core/landing-scene-state.ts` — landingSceneState plain object + 타입 정의
 - [ ] `three/objects/sphere.ts` — 파티클 구체
   - [ ] fibonacci 구면 분포 좌표 계산 (~2000개)
   - [ ] TSL PointsNodeMaterial 셰이더 구성
