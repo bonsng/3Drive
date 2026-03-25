@@ -11,13 +11,13 @@
   - [x] resize 핸들러 (rAF 디바운스)
   - [x] `{ init, dispose, scene, camera, renderer }` 반환
 - [x] `three/core/landing-scene-state.ts` — landingSceneState plain object + 타입 정의
-- [ ] `three/objects/sphere.ts` — 파티클 구체
-  - [ ] fibonacci 구면 분포 좌표 계산 (~2000개)
-  - [ ] TSL PointsNodeMaterial 셰이더 구성
-  - [ ] morphProgress uniform (구체 ↔ 클러스터 보간)
-  - [ ] 자동 회전 + wave 모션
-- [ ] `three/objects/particles.ts` — Ambient 배경 파티클 (~200개)
-  - [ ] TSL로 크기/투명도 애니메이션
+- [x] `three/objects/sphere.ts` — 파티클 구체
+  - [x] fibonacci 구면 분포 좌표 계산 (~2000개)
+  - [x] TSL PointsNodeMaterial 셰이더 구성
+  - [x] morphProgress uniform (구체 ↔ 클러스터 보간)
+  - [x] 자동 회전 + wave 모션
+- [x] `three/objects/particles.ts` — Ambient 배경 파티클 (~200개)
+  - [x] TSL로 크기/투명도 애니메이션
 
 **→ Phase 1 완료 후 유저 확인**
 
