@@ -5,7 +5,6 @@
 ## Phase 1: Foundation
 
 - [x] GSAP 설치 (`bun add gsap`)
-- [ ] `src/pages/landing/` 디렉토리 구조 생성
 - [x] `three/core/landing-scene.ts` — `createLandingScene(canvas)` 팩토리 함수
   - [x] WebGPURenderer + Scene + PerspectiveCamera 초기화
   - [x] `renderer.setAnimationLoop()` 설정
@@ -36,6 +35,7 @@
 
 ## Phase 3: 페이지 조립
 
+- [ ] `src/pages/landing/` 디렉토리 구조 생성
 - [ ] `HomePage.tsx` — 메인 페이지 컴포넌트
   - [ ] fixed canvas 요소
   - [ ] 7개 섹션 div (각 min-h-screen)
