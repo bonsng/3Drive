@@ -18,8 +18,16 @@ jobs:
       id-token: write
     steps:
       - uses: actions/checkout@v4
+      - name: Read review prompt
+        id: prompt
+        run: |
+          {
+            echo 'content<<EOF'
+            cat .github/prompts/code-review.md
+            echo 'EOF'
+          } >> "$GITHUB_OUTPUT"
       - uses: anthropics/claude-code-action@v1
         with:
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
           claude_args: '--max-turns 5'
-          prompt_file: .github/prompts/code-review.md
+          prompt: ${{ steps.prompt.outputs.content }}
