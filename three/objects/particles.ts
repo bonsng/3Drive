@@ -5,24 +5,16 @@ import {
   Scene,
   Sprite,
 } from 'three/webgpu';
-import {
-  color,
-  float,
-  instancedBufferAttribute,
-  sin,
-  smoothstep,
-  uniform,
-  uv,
-  vec3,
-} from 'three/tsl';
+import { color, float, instancedBufferAttribute, sin, uniform, vec3 } from 'three/tsl';
 import { LANDING } from '../constants';
 import { randomPositions, randomSeeds } from '../utils/geometry';
+import { circleMask } from '../utils/tsl';
 
-const { ambient: CFG } = LANDING;
+const { ambient: AMBIENT } = LANDING;
 
 export function createAmbientParticles(scene: Scene) {
-  const positions = randomPositions(CFG.count, CFG.spread, [-CFG.spread, -1.5]);
-  const seeds = randomSeeds(CFG.count);
+  const positions = randomPositions(AMBIENT.count, AMBIENT.spread, AMBIENT.zRange);
+  const seeds = randomSeeds(AMBIENT.count);
 
   const posAttr = new InstancedBufferAttribute(positions, 3);
   const seedAttr = new InstancedBufferAttribute(seeds, 1);
@@ -34,7 +26,7 @@ export function createAmbientParticles(scene: Scene) {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any -- TS can't infer itemSize=1 → float
   const seed = float(instancedBufferAttribute(seedAttr) as any);
 
-  const floatOffset = sin(uTime.mul(CFG.floatSpeed).add(seed)).mul(CFG.floatAmplitude);
+  const floatOffset = sin(uTime.mul(AMBIENT.floatSpeed).add(seed)).mul(AMBIENT.floatAmplitude);
   const finalPos = basePos.add(vec3(float(0), floatOffset, float(0)));
 
   // Material
@@ -43,18 +35,14 @@ export function createAmbientParticles(scene: Scene) {
     depthWrite: false,
     blending: AdditiveBlending,
   });
-  // Circular particle shape
-  const dist = uv().sub(0.5).length();
-  const circle = smoothstep(0.5, 0.3, dist).mul(CFG.opacity);
-
   material.positionNode = finalPos;
-  material.sizeNode = float(CFG.pointSize);
-  material.colorNode = color(CFG.color);
-  material.opacityNode = circle;
+  material.sizeNode = float(AMBIENT.pointSize);
+  material.colorNode = color(AMBIENT.color);
+  material.opacityNode = circleMask().mul(AMBIENT.opacity);
 
   // Instanced sprite
   const sprite = new Sprite(material);
-  sprite.count = CFG.count;
+  sprite.count = AMBIENT.count;
   scene.add(sprite);
 
   function update(elapsed: number) {

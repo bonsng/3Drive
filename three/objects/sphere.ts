@@ -5,24 +5,15 @@ import {
   Scene,
   Sprite,
 } from 'three/webgpu';
-import {
-  color,
-  float,
-  instancedBufferAttribute,
-  mix,
-  sin,
-  smoothstep,
-  uniform,
-  uv,
-  vec3,
-} from 'three/tsl';
+import { color, cos, float, instancedBufferAttribute, mix, sin, uniform, vec3 } from 'three/tsl';
 import { LANDING } from '../constants';
 import { fibonacciSphere } from '../utils/geometry';
+import { circleMask } from '../utils/tsl';
 
-const { sphere: CFG } = LANDING;
+const { sphere: SPHERE } = LANDING;
 
 export function createParticleSphere(scene: Scene) {
-  const spherePositions = fibonacciSphere(CFG.count, CFG.radius);
+  const spherePositions = fibonacciSphere(SPHERE.count, SPHERE.radius);
   const clusterPositions = new Float32Array(spherePositions); // Phase 1: spherePos 복사본
 
   const spherePosAttr = new InstancedBufferAttribute(spherePositions, 3);
@@ -37,8 +28,21 @@ export function createParticleSphere(scene: Scene) {
   const clusterPos = vec3(instancedBufferAttribute(clusterPosAttr));
 
   const morphed = mix(spherePos, clusterPos, uMorphProgress);
-  const wave = sin(uTime.add(spherePos.x.mul(CFG.waveFrequency))).mul(CFG.waveAmplitude);
-  const finalPos = morphed.add(vec3(wave, wave, float(0)));
+
+  // Radial wave: 구체 표면을 따라 숨쉬듯 팽창/수축
+  const wave = sin(uTime.add(spherePos.x.mul(SPHERE.waveFrequency))).mul(SPHERE.waveAmplitude);
+  const radialDir = morphed.normalize();
+  const waved = morphed.add(radialDir.mul(wave));
+
+  // Y-axis rotation in TSL (CPU rotation 제거)
+  const angle = uTime.mul(SPHERE.autoRotateSpeed);
+  const c = cos(angle);
+  const s = sin(angle);
+  const finalPos = vec3(
+    waved.x.mul(c).add(waved.z.mul(s)),
+    waved.y,
+    waved.x.mul(s).negate().add(waved.z.mul(c)),
+  );
 
   // Material
   const material = new PointsNodeMaterial({
@@ -46,23 +50,18 @@ export function createParticleSphere(scene: Scene) {
     depthWrite: false,
     blending: AdditiveBlending,
   });
-  // Circular particle shape
-  const dist = uv().sub(0.5).length();
-  const circle = smoothstep(0.5, 0.3, dist);
-
   material.positionNode = finalPos;
-  material.sizeNode = float(CFG.pointSize);
-  material.colorNode = color(CFG.color);
-  material.opacityNode = circle;
+  material.sizeNode = float(SPHERE.pointSize);
+  material.colorNode = color(SPHERE.color);
+  material.opacityNode = circleMask();
 
   // Instanced sprite
   const sprite = new Sprite(material);
-  sprite.count = CFG.count;
+  sprite.count = SPHERE.count;
   scene.add(sprite);
 
   function update(elapsed: number) {
     uTime.value = elapsed;
-    sprite.rotation.y = elapsed * CFG.autoRotateSpeed;
   }
 
   function dispose() {

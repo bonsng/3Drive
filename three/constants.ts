@@ -30,6 +30,7 @@ export const LANDING = {
   ambient: {
     count: 100,
     spread: 8,
+    zRange: [-4, -1.5] as [number, number],
     pointSize: 0.03,
     color: 0x4466aa,
     floatSpeed: 0.3,
