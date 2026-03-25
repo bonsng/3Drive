@@ -56,6 +56,7 @@ export function createLandingScene(canvas: HTMLCanvasElement) {
   }
 
   async function init() {
+    await renderer.init();
     window.addEventListener('resize', onResize);
     renderer.setAnimationLoop(animate);
   }
