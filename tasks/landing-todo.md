@@ -16,6 +16,7 @@
   - [x] TSL PointsNodeMaterial 셰이더 구성
   - [x] morphProgress uniform (구체 ↔ 클러스터 보간)
   - [x] 자동 회전 + wave 모션
+  - [x] 마우스 포인터 기반 X/Y축 회전 (느린 자동 회전 병행)
 - [x] `three/objects/particles.ts` — Ambient 배경 파티클 (~200개)
   - [x] TSL로 크기/투명도 애니메이션
 
@@ -23,13 +24,13 @@
 
 ## Phase 2: GSAP 통합
 
-- [ ] `hooks/use-landing-scene.ts` — React hook
-  - [ ] canvas ref → init() 호출
-  - [ ] unmount 시 dispose()
-- [ ] `animations/scroll-timeline.ts` — GSAP ScrollTrigger 설정
-  - [ ] ScrollTrigger plugin 등록
-  - [ ] 섹션별 ScrollTrigger 인스턴스 (pin + scrub)
-  - [ ] sceneState 값 tween 연동
+- [x] `hooks/use-landing-scene.ts` — React hook
+  - [x] canvas ref → init() 호출
+  - [x] unmount 시 dispose()
+- [x] `animations/scroll-timeline.ts` — GSAP ScrollTrigger 설정
+  - [x] ScrollTrigger plugin 등록
+  - [x] 섹션별 ScrollTrigger 인스턴스 (pin + scrub)
+  - [x] sceneState 값 tween 연동
 
 **→ Phase 2 완료 후 유저 확인**
 

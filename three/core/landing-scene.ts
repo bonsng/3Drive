@@ -1,5 +1,4 @@
-import { Color, PerspectiveCamera, Scene, Vector2, WebGPURenderer } from 'three/webgpu';
-import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { Color, PerspectiveCamera, Scene, Vector2, Vector3, WebGPURenderer } from 'three/webgpu';
 import { HOMEPAGE_CAMERA, MAX_PIXEL_RATIO } from '../constants';
 import { createParticleSphere } from '../objects/sphere';
 import { createAmbientParticles } from '../objects/particles';
@@ -23,11 +22,8 @@ export function createLandingScene(canvas: HTMLCanvasElement) {
   renderer.setPixelRatio(Math.min(devicePixelRatio, MAX_PIXEL_RATIO));
   renderer.setSize(canvas.clientWidth, canvas.clientHeight);
 
-  // TODO: remove OrbitControls before production
-  const controls = new OrbitControls(camera, canvas);
-  controls.enableDamping = true;
-
   const pointer = new Vector2();
+  const lookAtTarget = new Vector3();
 
   // 3D objects
   const sphere = createParticleSphere(scene);
@@ -38,10 +34,15 @@ export function createLandingScene(canvas: HTMLCanvasElement) {
 
     // Sync state → uniforms
     sphere.uniforms.morphProgress.value = landingSceneState.morphProgress;
+
+    // Sync state → camera
+    const { camera: cam, lookAt } = landingSceneState;
+    camera.position.set(cam.x, cam.y, cam.z);
+    camera.lookAt(lookAtTarget.set(lookAt.x, lookAt.y, lookAt.z));
+
     sphere.update(elapsed);
     ambient.update(elapsed);
 
-    controls.update();
     renderer.render(scene, camera);
   }
 
@@ -66,15 +67,14 @@ export function createLandingScene(canvas: HTMLCanvasElement) {
   async function init() {
     await renderer.init();
     window.addEventListener('resize', onResize);
-    canvas.addEventListener('pointermove', onPointerMove);
+    window.addEventListener('pointermove', onPointerMove);
     renderer.setAnimationLoop(animate);
   }
 
   function dispose() {
     renderer.setAnimationLoop(null);
-    controls.dispose();
     window.removeEventListener('resize', onResize);
-    canvas.removeEventListener('pointermove', onPointerMove);
+    window.removeEventListener('pointermove', onPointerMove);
     sphere.dispose();
     ambient.dispose();
     renderer.dispose();
