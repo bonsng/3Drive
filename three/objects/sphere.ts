@@ -22,6 +22,8 @@ export function createParticleSphere(scene: Scene) {
   // TSL uniforms
   const uMorphProgress = uniform(0);
   const uTime = uniform(0);
+  const uPointerX = uniform(0); // NDC -1..1
+  const uPointerY = uniform(0);
 
   // TSL nodes: morph + wave
   const spherePos = vec3(instancedBufferAttribute(spherePosAttr));
@@ -34,14 +36,23 @@ export function createParticleSphere(scene: Scene) {
   const radialDir = morphed.normalize();
   const waved = morphed.add(radialDir.mul(wave));
 
-  // Y-axis rotation in TSL (CPU rotation 제거)
-  const angle = uTime.mul(SPHERE.autoRotateSpeed);
-  const c = cos(angle);
-  const s = sin(angle);
-  const finalPos = vec3(
-    waved.x.mul(c).add(waved.z.mul(s)),
+  // Slow auto-rotation + mouse-driven rotation
+  const yAngle = uTime.mul(SPHERE.autoRotateSpeed).add(uPointerX.mul(SPHERE.mouseRotateX));
+  const cy = cos(yAngle);
+  const sy = sin(yAngle);
+  const rotY = vec3(
+    waved.x.mul(cy).add(waved.z.mul(sy)),
     waved.y,
-    waved.x.mul(s).negate().add(waved.z.mul(c)),
+    waved.x.mul(sy).negate().add(waved.z.mul(cy)),
+  );
+
+  const xAngle = uPointerY.negate().mul(SPHERE.mouseRotateY);
+  const cx = cos(xAngle);
+  const sx = sin(xAngle);
+  const finalPos = vec3(
+    rotY.x,
+    rotY.y.mul(cx).sub(rotY.z.mul(sx)),
+    rotY.y.mul(sx).add(rotY.z.mul(cx)),
   );
 
   // Material
@@ -71,7 +82,12 @@ export function createParticleSphere(scene: Scene) {
 
   return {
     update,
-    uniforms: { morphProgress: uMorphProgress, time: uTime },
+    uniforms: {
+      morphProgress: uMorphProgress,
+      time: uTime,
+      pointerX: uPointerX,
+      pointerY: uPointerY,
+    },
     dispose,
   };
 }

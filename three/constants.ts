@@ -25,7 +25,9 @@ export const LANDING = {
     color: 0x6688ff,
     waveAmplitude: 0.02,
     waveFrequency: 10,
-    autoRotateSpeed: 0.15,
+    autoRotateSpeed: 0.05,
+    mouseRotateX: 0.4,
+    mouseRotateY: 0.3,
   },
   ambient: {
     count: 100,

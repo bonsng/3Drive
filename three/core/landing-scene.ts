@@ -1,4 +1,4 @@
-import { Color, PerspectiveCamera, Scene, WebGPURenderer } from 'three/webgpu';
+import { Color, PerspectiveCamera, Scene, Vector2, WebGPURenderer } from 'three/webgpu';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { HOMEPAGE_CAMERA, MAX_PIXEL_RATIO } from '../constants';
 import { createParticleSphere } from '../objects/sphere';
@@ -26,6 +26,8 @@ export function createLandingScene(canvas: HTMLCanvasElement) {
   // TODO: remove OrbitControls before production
   const controls = new OrbitControls(camera, canvas);
   controls.enableDamping = true;
+
+  const pointer = new Vector2();
 
   // 3D objects
   const sphere = createParticleSphere(scene);
@@ -55,9 +57,16 @@ export function createLandingScene(canvas: HTMLCanvasElement) {
     });
   }
 
+  function onPointerMove(e: PointerEvent) {
+    pointer.set((e.clientX / window.innerWidth) * 2 - 1, -(e.clientY / window.innerHeight) * 2 + 1);
+    sphere.uniforms.pointerX.value = pointer.x;
+    sphere.uniforms.pointerY.value = pointer.y;
+  }
+
   async function init() {
     await renderer.init();
     window.addEventListener('resize', onResize);
+    canvas.addEventListener('pointermove', onPointerMove);
     renderer.setAnimationLoop(animate);
   }
 
@@ -65,6 +74,7 @@ export function createLandingScene(canvas: HTMLCanvasElement) {
     renderer.setAnimationLoop(null);
     controls.dispose();
     window.removeEventListener('resize', onResize);
+    canvas.removeEventListener('pointermove', onPointerMove);
     sphere.dispose();
     ambient.dispose();
     renderer.dispose();
