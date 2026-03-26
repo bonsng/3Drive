@@ -39,8 +39,8 @@ export function createScrollTimeline(container: HTMLElement) {
   return {
     timeline: tl,
     kill() {
+      tl.scrollTrigger?.kill();
       tl.kill();
-      ScrollTrigger.getAll().forEach((st) => st.kill());
     },
   };
 }

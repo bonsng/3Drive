@@ -71,7 +71,12 @@ export function createLandingScene(canvas: HTMLCanvasElement) {
     renderer.setAnimationLoop(animate);
   }
 
+  let disposed = false;
+
   function dispose() {
+    if (disposed) return;
+    disposed = true;
+    cancelAnimationFrame(resizeTimeout);
     renderer.setAnimationLoop(null);
     window.removeEventListener('resize', onResize);
     window.removeEventListener('pointermove', onPointerMove);

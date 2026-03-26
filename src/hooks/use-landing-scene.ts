@@ -8,11 +8,16 @@ export function useLandingScene(canvasRef: RefObject<HTMLCanvasElement | null>) 
     const canvas = canvasRef.current;
     if (!canvas) return;
 
+    let cancelled = false;
     const landing = createLandingScene(canvas);
     landingRef.current = landing;
-    landing.init();
+
+    landing.init().then(() => {
+      if (cancelled) landing.dispose();
+    });
 
     return () => {
+      cancelled = true;
       landing.dispose();
       landingRef.current = null;
     };

@@ -13,7 +13,7 @@ export const DRIVEPAGE_CAMERA = {
   fov: 50,
   near: 0.1,
   far: 100,
-  position: { x: 0, y: 0, z: 5 },
+  position: [0, 0, 5] as const,
 } as const;
 
 // Landing page
