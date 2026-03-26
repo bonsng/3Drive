@@ -10,3 +10,6 @@ Focus on:
 
 Be concise. Skip trivial style nits.
 Always respond in Korean.
+
+After completing your review, you MUST post your findings as a PR comment using the GitHub API.
+Use `gh pr comment` to leave your review summary on the PR.
