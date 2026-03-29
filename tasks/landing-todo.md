@@ -67,16 +67,16 @@
   - [x] Sec 3→4: 줌인 (z:5→3)
   - [x] Sec 5→6: 줌아웃 + 공전 (orbitTheta 0→2π)
   - [x] Sec 6→7: 원점 복귀
-- [ ] `three/objects/tree-lines.ts` — 노드 간 연결선
-  - [ ] LineSegments + DashedLineMaterial
-  - [ ] expandT에 연동하여 fade in
-- [ ] `three/effects/drag-trail.ts` — 드래그 애니메이션 (Section 3)
-  - [ ] dragGroupAttr (이동 대상 파티클 마킹)
-  - [ ] 베지어 곡선 이동 + 글로우 트레일
-- [ ] `overlay/ContextMenuOverlay.tsx` — HTML 오버레이 (Section 4)
-  - [ ] 3D→2D 좌표 변환 + glassmorphism
-- [ ] `overlay/PreviewOverlay.tsx` — HTML 오버레이 (Section 5)
-  - [ ] 프리뷰 카드 glassmorphism
+- [x] `three/objects/tree-lines.ts` — 노드 간 연결선
+  - [x] LineSegments + LineBasicMaterial
+  - [x] expandT에 연동하여 fade in
+- [x] `three/effects/drag-trail.ts` — 드래그 애니메이션 (Section 3)
+  - [x] dragGroupAttr (이동 대상 파티클 마킹)
+  - [x] 포물선 아크 이동 + 글로우 트레일
+- [x] `overlay/ContextMenuOverlay.tsx` — HTML 오버레이 (Section 4)
+  - [x] glassmorphism + scroll-synced opacity
+- [x] `overlay/PreviewOverlay.tsx` — HTML 오버레이 (Section 5)
+  - [x] 프리뷰 카드 glassmorphism + scroll-synced opacity
 
 **→ Phase 4 완료 후 유저 확인**
 

@@ -19,10 +19,17 @@ import {
 import { LANDING } from '../constants';
 import { fibonacciSphere } from '../utils/geometry';
 import { circleMask } from '../utils/tsl';
+import type { DragData } from '../effects/drag-trail';
 
 const { sphere: SPHERE } = LANDING;
 
-export function createParticleSphere(scene: Scene, treePositions?: Float32Array) {
+export interface ParticleSphereOptions {
+  treePositions?: Float32Array;
+  dragData?: DragData;
+}
+
+export function createParticleSphere(scene: Scene, options: ParticleSphereOptions = {}) {
+  const { treePositions, dragData } = options;
   const spherePositions = fibonacciSphere(SPHERE.count, SPHERE.radius);
 
   const spherePosAttr = new InstancedBufferAttribute(spherePositions, 3);
@@ -31,15 +38,28 @@ export function createParticleSphere(scene: Scene, treePositions?: Float32Array)
     3,
   );
 
+  // Drag attributes
+  const dragGroupAttr = new InstancedBufferAttribute(
+    dragData?.dragGroup ?? new Float32Array(SPHERE.count),
+    1,
+  );
+  const dragTargetAttr = new InstancedBufferAttribute(
+    dragData?.dragTarget ?? new Float32Array(SPHERE.count * 3),
+    3,
+  );
+
   // TSL uniforms
   const uMorphProgress = uniform(0);
   const uTime = uniform(0);
   const uPointerX = uniform(0); // NDC -1..1
   const uPointerY = uniform(0);
+  const uDragProgress = uniform(0);
 
   // TSL nodes
   const spherePos = vec3(instancedBufferAttribute(spherePosAttr));
   const treePos = vec3(instancedBufferAttribute(treePosAttr));
+  const dragGroup = float(instancedBufferAttribute(dragGroupAttr));
+  const dragTargetPos = vec3(instancedBufferAttribute(dragTargetAttr));
 
   // 3단계 morph: 구체 → 중심 수렴 → 트리 폭발
   // morphProgress 0.0→0.4: collapseT (구체 → 원점)
@@ -77,11 +97,23 @@ export function createParticleSphere(scene: Scene, treePositions?: Float32Array)
   const rawSx = sin(xAngle);
   const cx = mix(float(1), rawCx, rotStrength);
   const sx = mix(float(0), rawSx, rotStrength);
-  const finalPos = vec3(
+  const rotatedPos = vec3(
     rotY.x,
     rotY.y.mul(cx).sub(rotY.z.mul(sx)),
     rotY.y.mul(sx).add(rotY.z.mul(cx)),
   );
+
+  // Drag animation: dragGroup=1 파티클만 목표 위치로 이동
+  // dragT = dragProgress * dragGroup (0 for non-drag particles)
+  const dragT = uDragProgress.mul(dragGroup);
+  // 수직 아크: sin(π·t)로 포물선 궤적
+  const arcY = sin(dragT.mul(Math.PI)).mul(0.8);
+  const dragDest = vec3(dragTargetPos.x, dragTargetPos.y.add(arcY), dragTargetPos.z);
+  const finalPos = mix(rotatedPos, dragDest, dragT);
+
+  // Drag 중인 파티클은 크기/밝기 증가
+  const sizeScale = float(1).add(dragT.mul(1.5));
+  const glowColor = mix(color(SPHERE.color), color(0xaaccff), dragT.mul(0.6));
 
   // Material
   const material = new PointsNodeMaterial({
@@ -90,8 +122,8 @@ export function createParticleSphere(scene: Scene, treePositions?: Float32Array)
     blending: AdditiveBlending,
   });
   material.positionNode = finalPos;
-  material.sizeNode = float(SPHERE.pointSize);
-  material.colorNode = color(SPHERE.color);
+  material.sizeNode = float(SPHERE.pointSize).mul(sizeScale);
+  material.colorNode = glowColor;
   material.opacityNode = circleMask();
 
   // Instanced sprite
@@ -112,6 +144,7 @@ export function createParticleSphere(scene: Scene, treePositions?: Float32Array)
     update,
     uniforms: {
       morphProgress: uMorphProgress,
+      dragProgress: uDragProgress,
       time: uTime,
       pointerX: uPointerX,
       pointerY: uPointerY,

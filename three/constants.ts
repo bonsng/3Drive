@@ -40,6 +40,8 @@ export const LANDING = {
     opacity: 0.4,
   },
   camera: {
+    treeView: { x: -1, y: 6, z: 4 },
+    treeViewLookAt: { x: 0, y: 0, z: 0 },
     zoomInZ: 3,
     zoomOutZ: 5,
     panLookAt: { x: 0.5, y: 0.3 },
