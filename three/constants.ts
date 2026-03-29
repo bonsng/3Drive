@@ -39,4 +39,16 @@ export const LANDING = {
     floatAmplitude: 0.5,
     opacity: 0.4,
   },
+  tree: {
+    rootCount: 300,
+    rootRadius: 0.15,
+    folderCount: 5,
+    particlesPerFolder: 150,
+    folderDistance: 2.0,
+    folderRadius: 0.3,
+    filesPerFolder: 3,
+    particlesPerFile: 50,
+    fileDistance: 0.8,
+    fileRadius: 0.15,
+  },
 } as const;
