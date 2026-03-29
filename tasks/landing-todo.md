@@ -36,41 +36,47 @@
 
 ## Phase 3: 페이지 조립
 
-- [ ] `src/pages/landing/` 디렉토리 구조 생성
-- [ ] `HomePage.tsx` — 메인 페이지 컴포넌트
-  - [ ] fixed canvas 요소
-  - [ ] 7개 섹션 div (각 min-h-screen)
-  - [ ] 기존 `src/pages/HomePage.tsx`에서 import 연결
-- [ ] `components/shared/SectionText.tsx` — 재사용 텍스트 블록
-- [ ] `components/hero/HeroSection.tsx` — 타이틀 + 태그라인 + CTA
-- [ ] `components/features/FeatureExplorer.tsx` — 3D 파일 탐색기 텍스트
-- [ ] `components/features/FeatureDragDrop.tsx` — 드래그 앤 드롭 텍스트
-- [ ] `components/features/FeatureContextMenu.tsx` — 컨텍스트 메뉴 텍스트
-- [ ] `components/features/FeaturePreview.tsx` — 파일 미리보기 텍스트
-- [ ] `components/features/FeatureCamera.tsx` — 카메라 컨트롤 텍스트
-- [ ] `components/footer/FooterCTA.tsx` — 최종 CTA
-- [ ] `animations/text-animations.ts` — 텍스트 reveal 애니메이션
+- [x] `src/pages/landing/` 디렉토리 구조 생성
+- [x] `HomePage.tsx` — 메인 페이지 컴포넌트
+  - [x] fixed canvas 요소
+  - [x] 7개 섹션 div (각 h-screen)
+  - [x] 기존 `src/pages/HomePage.tsx`에서 직접 import
+- [x] `components/shared/SectionText.tsx` — 재사용 텍스트 블록
+- [x] `components/hero/HeroSection.tsx` — 타이틀 + 태그라인 + CTA
+- [x] `components/features/FeatureExplorer.tsx` — 3D 파일 탐색기 텍스트
+- [x] `components/features/FeatureDragDrop.tsx` — 드래그 앤 드롭 텍스트
+- [x] `components/features/FeatureContextMenu.tsx` — 컨텍스트 메뉴 텍스트
+- [x] `components/features/FeaturePreview.tsx` — 파일 미리보기 텍스트
+- [x] `components/features/FeatureCamera.tsx` — 카메라 컨트롤 텍스트
+- [x] `components/footer/FooterCTA.tsx` — 최종 CTA
+- [x] `animations/text-animations.ts` — 텍스트 reveal 애니메이션
 
 **→ Phase 3 완료 후 유저 확인**
 
 ## Phase 4: 섹션별 3D 효과
 
-- [ ] `three/objects/node-cluster.ts` — 트리 클러스터 레이아웃 좌표 계산
-  - [ ] clusterPosition attribute 데이터 생성
-  - [ ] 연결선 LineSegments (dashed material)
-- [ ] `three/effects/drag-trail.ts` — 드래그 & 트레일 (Section 3)
-  - [ ] 노드 분리 + 베지어 곡선 이동
-  - [ ] 글로우 트레일 효과
-  - [ ] 목표 폴더 펄스 애니메이션
-- [ ] `components/overlay/ContextMenuOverlay.tsx` — HTML 오버레이 (Section 4)
-  - [ ] 3D→2D 좌표 변환 (Vector3.project)
-  - [ ] glassmorphism 카드
-- [ ] `components/overlay/PreviewOverlay.tsx` — HTML 오버레이 (Section 5)
+> 상세 계획: `docs/plans/phase4-3d-effects-plan.md`
+
+- [ ] `three/objects/tree-layout.ts` — 방사형 트리 좌표 계산
+  - [ ] 루트(~200) + 폴더(~150×5) + 파일(~50×15) 배치
+  - [ ] `createTreePositions(count)` → Float32Array
+- [ ] `three/objects/sphere.ts` 수정 — 3단계 morph 셰이더
+  - [ ] treePosAttr 추가 (기존 clusterPosAttr 교체)
+  - [ ] 구체→점 수렴→트리 폭발 (collapseT + expandT)
+- [ ] `three/objects/tree-lines.ts` — 노드 간 연결선
+  - [ ] LineSegments + DashedLineMaterial
+  - [ ] expandT에 연동하여 fade in
+- [ ] `three/effects/drag-trail.ts` — 드래그 애니메이션 (Section 3)
+  - [ ] dragGroupAttr (이동 대상 파티클 마킹)
+  - [ ] 베지어 곡선 이동 + 글로우 트레일
+- [ ] `scroll-timeline.ts` 업데이트 — 카메라 애니메이션
+  - [ ] Sec 3→4: 줌인 (z:5→3)
+  - [ ] Sec 5→6: 줌아웃 + 공전 (orbitTheta 0→2π)
+  - [ ] Sec 6→7: 원점 복귀
+- [ ] `overlay/ContextMenuOverlay.tsx` — HTML 오버레이 (Section 4)
+  - [ ] 3D→2D 좌표 변환 + glassmorphism
+- [ ] `overlay/PreviewOverlay.tsx` — HTML 오버레이 (Section 5)
   - [ ] 프리뷰 카드 glassmorphism
-- [ ] `three/effects/highlight.ts` — 노드 하이라이트/펄스 (Section 4-5)
-- [ ] `three/objects/orbit-ring.ts` — 카메라 궤도 링 (Section 6)
-  - [ ] orbitTheta 애니메이션
-  - [ ] TorusGeometry
 
 **→ Phase 4 완료 후 유저 확인**
 
