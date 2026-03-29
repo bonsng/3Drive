@@ -1,5 +1,6 @@
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { LANDING } from '../constants';
 import { landingSceneState } from '../core/landing-scene-state';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -21,19 +22,27 @@ export function createScrollTimeline(container: HTMLElement) {
     },
   });
 
-  // Section 1→2: 구체 → 클러스터 morph
+  // Section 1→2: 구체 → 점 수렴 → 트리 폭발
   tl.to(landingSceneState, { morphProgress: 1, duration: 1 }, 0);
 
-  // Section 2→3: 클러스터 유지, dragProgress 시작
+  // Section 2→3: 트리 유지, dragProgress 시작
   tl.to(landingSceneState, { dragProgress: 1, duration: 1 }, 1);
 
-  // Section 3→4: dragProgress 리셋
-  tl.to(landingSceneState, { dragProgress: 0, duration: 0.5 }, 2);
+  const { camera: CAM } = LANDING;
 
-  // Section 5→6: 카메라 공전
+  // Section 3→4: dragProgress 리셋 + 줌인
+  tl.to(landingSceneState, { dragProgress: 0, duration: 0.5 }, 2);
+  tl.to(landingSceneState.camera, { z: CAM.zoomInZ, duration: 1 }, 2);
+
+  // Section 4→5: lookAt 패닝 (시선을 약간 옆으로)
+  tl.to(landingSceneState.lookAt, { ...CAM.panLookAt, duration: 1 }, 3);
+
+  // Section 5→6: 줌아웃 + 공전 (orbitTheta 0→2π)
+  tl.to(landingSceneState.camera, { z: CAM.zoomOutZ, duration: 1 }, 4);
   tl.to(landingSceneState, { orbitTheta: Math.PI * 2, duration: 1 }, 4);
 
-  // Section 6→7: 클러스터 → 구체 복귀
+  // Section 6→7: lookAt 원점 복귀 + 트리 → 구체 복귀
+  tl.to(landingSceneState.lookAt, { x: 0, y: 0, duration: 0.5 }, 5);
   tl.to(landingSceneState, { morphProgress: 0, duration: 1 }, 5);
 
   return {

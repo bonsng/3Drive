@@ -39,6 +39,11 @@ export const LANDING = {
     floatAmplitude: 0.5,
     opacity: 0.4,
   },
+  camera: {
+    zoomInZ: 3,
+    zoomOutZ: 5,
+    panLookAt: { x: 0.5, y: 0.3 },
+  },
   tree: {
     rootCount: 300,
     rootRadius: 0.15,

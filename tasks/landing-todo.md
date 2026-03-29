@@ -57,22 +57,22 @@
 
 > 상세 계획: `docs/plans/phase4-3d-effects-plan.md`
 
-- [ ] `three/objects/tree-layout.ts` — 방사형 트리 좌표 계산
-  - [ ] 루트(~200) + 폴더(~150×5) + 파일(~50×15) 배치
-  - [ ] `createTreePositions(count)` → Float32Array
-- [ ] `three/objects/sphere.ts` 수정 — 3단계 morph 셰이더
-  - [ ] treePosAttr 추가 (기존 clusterPosAttr 교체)
-  - [ ] 구체→점 수렴→트리 폭발 (collapseT + expandT)
+- [x] `three/objects/tree-layout.ts` — 방사형 트리 좌표 계산
+  - [x] 루트(~200) + 폴더(~150×5) + 파일(~50×15) 배치
+  - [x] `createTreeLayout(count)` → Float32Array + nodes
+- [x] `three/objects/sphere.ts` 수정 — 3단계 morph 셰이더
+  - [x] treePosAttr 추가 (기존 clusterPosAttr 교체)
+  - [x] 구체→점 수렴→트리 폭발 (collapseT + expandT)
+- [x] `scroll-timeline.ts` 업데이트 — 카메라 애니메이션
+  - [x] Sec 3→4: 줌인 (z:5→3)
+  - [x] Sec 5→6: 줌아웃 + 공전 (orbitTheta 0→2π)
+  - [x] Sec 6→7: 원점 복귀
 - [ ] `three/objects/tree-lines.ts` — 노드 간 연결선
   - [ ] LineSegments + DashedLineMaterial
   - [ ] expandT에 연동하여 fade in
 - [ ] `three/effects/drag-trail.ts` — 드래그 애니메이션 (Section 3)
   - [ ] dragGroupAttr (이동 대상 파티클 마킹)
   - [ ] 베지어 곡선 이동 + 글로우 트레일
-- [ ] `scroll-timeline.ts` 업데이트 — 카메라 애니메이션
-  - [ ] Sec 3→4: 줌인 (z:5→3)
-  - [ ] Sec 5→6: 줌아웃 + 공전 (orbitTheta 0→2π)
-  - [ ] Sec 6→7: 원점 복귀
 - [ ] `overlay/ContextMenuOverlay.tsx` — HTML 오버레이 (Section 4)
   - [ ] 3D→2D 좌표 변환 + glassmorphism
 - [ ] `overlay/PreviewOverlay.tsx` — HTML 오버레이 (Section 5)

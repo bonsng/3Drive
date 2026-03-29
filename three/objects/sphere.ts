@@ -5,19 +5,31 @@ import {
   Scene,
   Sprite,
 } from 'three/webgpu';
-import { color, cos, float, instancedBufferAttribute, mix, sin, uniform, vec3 } from 'three/tsl';
+import {
+  color,
+  cos,
+  float,
+  instancedBufferAttribute,
+  mix,
+  sin,
+  smoothstep,
+  uniform,
+  vec3,
+} from 'three/tsl';
 import { LANDING } from '../constants';
 import { fibonacciSphere } from '../utils/geometry';
 import { circleMask } from '../utils/tsl';
 
 const { sphere: SPHERE } = LANDING;
 
-export function createParticleSphere(scene: Scene) {
+export function createParticleSphere(scene: Scene, treePositions?: Float32Array) {
   const spherePositions = fibonacciSphere(SPHERE.count, SPHERE.radius);
-  const clusterPositions = new Float32Array(spherePositions); // Phase 1: spherePos 복사본
 
   const spherePosAttr = new InstancedBufferAttribute(spherePositions, 3);
-  const clusterPosAttr = new InstancedBufferAttribute(clusterPositions, 3);
+  const treePosAttr = new InstancedBufferAttribute(
+    treePositions ?? new Float32Array(SPHERE.count * 3),
+    3,
+  );
 
   // TSL uniforms
   const uMorphProgress = uniform(0);
@@ -25,21 +37,35 @@ export function createParticleSphere(scene: Scene) {
   const uPointerX = uniform(0); // NDC -1..1
   const uPointerY = uniform(0);
 
-  // TSL nodes: morph + wave
+  // TSL nodes
   const spherePos = vec3(instancedBufferAttribute(spherePosAttr));
-  const clusterPos = vec3(instancedBufferAttribute(clusterPosAttr));
+  const treePos = vec3(instancedBufferAttribute(treePosAttr));
 
-  const morphed = mix(spherePos, clusterPos, uMorphProgress);
+  // 3단계 morph: 구체 → 중심 수렴 → 트리 폭발
+  // morphProgress 0.0→0.4: collapseT (구체 → 원점)
+  // morphProgress 0.4→0.45: 정지 (극적 멈춤)
+  // morphProgress 0.45→1.0: expandT (원점 → 트리)
+  const collapseT = smoothstep(float(0), float(0.4), uMorphProgress);
+  const expandT = smoothstep(float(0.45), float(1.0), uMorphProgress);
+  const collapsed = mix(spherePos, vec3(0, 0, 0), collapseT);
+  const morphed = mix(collapsed, treePos, expandT);
 
-  // Radial wave: 구체 표면을 따라 숨쉬듯 팽창/수축
-  const wave = sin(uTime.add(spherePos.x.mul(SPHERE.waveFrequency))).mul(SPHERE.waveAmplitude);
+  // Radial wave: 구체일 때만 적용 (트리 전개 시 fade out)
+  const waveStrength = float(1).sub(collapseT);
+  const wave = sin(uTime.add(spherePos.x.mul(SPHERE.waveFrequency)))
+    .mul(SPHERE.waveAmplitude)
+    .mul(waveStrength);
   const radialDir = morphed.normalize();
   const waved = morphed.add(radialDir.mul(wave));
 
-  // Slow auto-rotation + mouse-driven rotation
+  // Slow auto-rotation + mouse-driven rotation (트리 전개 시 fade out)
+  const rotStrength = float(1).sub(expandT);
   const yAngle = uTime.mul(SPHERE.autoRotateSpeed).add(uPointerX.mul(SPHERE.mouseRotateX));
-  const cy = cos(yAngle);
-  const sy = sin(yAngle);
+  const rawCy = cos(yAngle);
+  const rawSy = sin(yAngle);
+  // rotStrength가 0이면 회전 없음: cos→1, sin→0
+  const cy = mix(float(1), rawCy, rotStrength);
+  const sy = mix(float(0), rawSy, rotStrength);
   const rotY = vec3(
     waved.x.mul(cy).add(waved.z.mul(sy)),
     waved.y,
@@ -47,8 +73,10 @@ export function createParticleSphere(scene: Scene) {
   );
 
   const xAngle = uPointerY.negate().mul(SPHERE.mouseRotateY);
-  const cx = cos(xAngle);
-  const sx = sin(xAngle);
+  const rawCx = cos(xAngle);
+  const rawSx = sin(xAngle);
+  const cx = mix(float(1), rawCx, rotStrength);
+  const sx = mix(float(0), rawSx, rotStrength);
   const finalPos = vec3(
     rotY.x,
     rotY.y.mul(cx).sub(rotY.z.mul(sx)),
