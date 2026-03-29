@@ -8,7 +8,7 @@ export function FeatureContextMenu() {
           label="Context Menu"
           title="우클릭, 모든 기능"
           description="이름 변경, 복사, 이동, 삭제. 익숙한 컨텍스트 메뉴로 모든 작업을 빠르게 처리하세요."
-          align="right"
+          align="left"
         />
       </div>
     </section>
