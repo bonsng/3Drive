@@ -36,14 +36,13 @@ export function createScrollTimeline(
   // Section 2→3: 드래그 시작 (단방향, 섹션 전체 사용)
   tl.to(landingSceneState, { dragProgress: 1, duration: 1 }, 1);
 
-  // Section 3→4: 드래그 완료 상태 유지 + 줌인 + 컨텍스트 메뉴
-  tl.to(landingSceneState.camera, { x: 0, y: 0, z: CAM.zoomInZ, duration: 1 }, 2);
-  tl.to(landingSceneState.lookAt, { x: 0, y: 0, z: 0, duration: 0.5 }, 2);
+  // Section 3→4: 드래그 완료 상태 유지 + 줌인 + 파일 노드 포커스 + 컨텍스트 메뉴
+  tl.to(landingSceneState.camera, { x: -2, y: -2, z: CAM.zoomInZ, duration: 1 }, 2);
+  tl.to(landingSceneState.lookAt, { ...CAM.fileLookAt, duration: 1 }, 2);
   tl.to(landingSceneState, { contextMenuOpacity: 1, duration: 0.5 }, 2.3);
 
-  // Section 4→5: 컨텍스트 메뉴 퇴장 + 패닝 + 프리뷰
+  // Section 4→5: 컨텍스트 메뉴 퇴장 + 프리뷰 (카메라 & lookAt 유지)
   tl.to(landingSceneState, { contextMenuOpacity: 0, duration: 0.3 }, 3);
-  tl.to(landingSceneState.lookAt, { ...CAM.panLookAt, duration: 1 }, 3);
   tl.to(landingSceneState, { previewOpacity: 1, duration: 0.5 }, 3.3);
 
   // Section 5→6: 프리뷰 퇴장 + 줌아웃 + 공전

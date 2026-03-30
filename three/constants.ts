@@ -44,7 +44,7 @@ export const LANDING = {
     treeViewLookAt: { x: 0, y: 0, z: 0 },
     zoomInZ: 3,
     zoomOutZ: 5,
-    panLookAt: { x: 0.5, y: 0.3 },
+    fileLookAt: { x: -1.942, y: -1.779, z: 0.8 },
   },
   scroll: {
     sectionCount: 7,
