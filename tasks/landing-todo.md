@@ -92,9 +92,12 @@
   - [x] `sphere.ts` — 단방향 드래그 (0→1) + sin 커브 글로우 (도착 시 해제)
   - [x] `tree-lines.ts` — 연결선 3그룹 분리 (static/drag/new), 드래그 시 fade out → 도착 시 새 연결선 fade in
   - [x] `scroll-timeline.ts` — 드래그 리셋 제거, 섹션 전체 사용
-- [ ] Step 3: 오버레이 위치 & 등장 개선
-  - [ ] ContextMenuOverlay, PreviewOverlay 위치 미세 조정
-  - [ ] 등장 시 translateY 슬라이드업 애니메이션 추가
+- [x] Step 3: 오버레이 위치 & 등장 개선
+  - [x] ContextMenuOverlay, PreviewOverlay 위치 미세 조정
+  - [x] 카메라 fileLookAt 파일 노드 포커스 (섹션 4-5 공통)
+  - [x] PreviewOverlay viewport 단위 배치 + 투명도 조정
+  - [x] ContextMenuOverlay hover 효과 추가
+  - [x] useLandingAnimations로 섹션 스크롤 상태 통합
 
 **→ Phase 4.5 완료 후 유저 확인**
 
