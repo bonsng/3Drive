@@ -8,6 +8,9 @@ export const landingSceneState = {
   morphProgress: 0,
   dragProgress: 0,
   orbitTheta: 0,
+  treeLinesOpacity: 0,
+  contextMenuOpacity: 0,
+  previewOpacity: 0,
 };
 
 export type LandingSceneState = typeof landingSceneState;

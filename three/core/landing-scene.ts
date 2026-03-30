@@ -1,7 +1,10 @@
 import { Color, PerspectiveCamera, Scene, Vector2, Vector3, WebGPURenderer } from 'three/webgpu';
-import { HOMEPAGE_CAMERA, MAX_PIXEL_RATIO } from '../constants';
+import { HOMEPAGE_CAMERA, LANDING, MAX_PIXEL_RATIO } from '../constants';
 import { createParticleSphere } from '../objects/sphere';
 import { createAmbientParticles } from '../objects/particles';
+import { createTreeLayout } from '../objects/tree-layout';
+import { createTreeLines } from '../objects/tree-lines';
+import { createDragData } from '../effects/drag-trail';
 import { landingSceneState } from './landing-scene-state';
 
 export function createLandingScene(canvas: HTMLCanvasElement) {
@@ -26,7 +29,13 @@ export function createLandingScene(canvas: HTMLCanvasElement) {
   const lookAtTarget = new Vector3();
 
   // 3D objects
-  const sphere = createParticleSphere(scene);
+  const treeLayout = createTreeLayout(LANDING.sphere.count);
+  const dragData = createDragData(treeLayout);
+  const sphere = createParticleSphere(scene, {
+    treePositions: treeLayout.positions,
+    dragData,
+  });
+  const treeLines = createTreeLines(scene, treeLayout.nodes);
   const ambient = createAmbientParticles(scene);
 
   function animate() {
@@ -34,10 +43,15 @@ export function createLandingScene(canvas: HTMLCanvasElement) {
 
     // Sync state → uniforms
     sphere.uniforms.morphProgress.value = landingSceneState.morphProgress;
+    sphere.uniforms.dragProgress.value = landingSceneState.dragProgress;
 
-    // Sync state → camera
-    const { camera: cam, lookAt } = landingSceneState;
-    camera.position.set(cam.x, cam.y, cam.z);
+    treeLines.update(landingSceneState.treeLinesOpacity, landingSceneState.dragProgress);
+
+    // Sync state → camera (orbitTheta로 XZ 평면 공전)
+    const { camera: cam, lookAt, orbitTheta } = landingSceneState;
+    const orbitX = Math.sin(orbitTheta) * cam.z;
+    const orbitZ = Math.cos(orbitTheta) * cam.z;
+    camera.position.set(cam.x + orbitX, cam.y, orbitZ);
     camera.lookAt(lookAtTarget.set(lookAt.x, lookAt.y, lookAt.z));
 
     sphere.update(elapsed);
@@ -81,6 +95,7 @@ export function createLandingScene(canvas: HTMLCanvasElement) {
     window.removeEventListener('resize', onResize);
     window.removeEventListener('pointermove', onPointerMove);
     sphere.dispose();
+    treeLines.dispose();
     ambient.dispose();
     renderer.dispose();
   }
