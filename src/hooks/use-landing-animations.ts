@@ -45,7 +45,8 @@ export function useLandingAnimations(
       cancelAnimationFrame(rafId);
       goToSectionRef.current = null;
     };
-  }, [containerRef, onSectionChange, overlayRefs]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- refs and callbacks are stable
+  }, [containerRef, onSectionChange]);
 
   return { currentSection, goToSection };
 }

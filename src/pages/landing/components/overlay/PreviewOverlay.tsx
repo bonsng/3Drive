@@ -4,15 +4,15 @@ export const PreviewOverlay = forwardRef<HTMLDivElement>(function PreviewOverlay
   return (
     <div
       ref={ref}
-      className="pointer-events-none fixed top-1/2 left-[12%] z-20 -translate-y-1/2"
+      className="pointer-events-none fixed top-[50vh] left-[22vw] z-20 -translate-y-1/2"
       style={{ opacity: 0 }}
     >
-      <div className="w-72 rounded-xl border border-white/20 bg-white/10 p-4 shadow-2xl backdrop-blur-xl">
+      <div className="w-72 rounded-xl border border-white/25 bg-white/15 p-4 shadow-2xl backdrop-blur-xl">
         {/* 썸네일 영역 */}
-        <div className="mb-3 aspect-video overflow-hidden rounded-lg bg-gradient-to-br from-blue-500/20 to-purple-500/20">
+        <div className="mb-3 aspect-video overflow-hidden rounded-lg bg-gradient-to-br from-blue-500/80 to-purple-500/80">
           <div className="flex h-full flex-col items-center justify-center gap-2">
-            <div className="text-3xl opacity-60">📄</div>
-            <div className="text-xs text-white/40">미리보기</div>
+            <div className="opacity text-3xl">📄</div>
+            <div className="text-xs text-white">미리보기</div>
           </div>
         </div>
 
