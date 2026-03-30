@@ -46,6 +46,13 @@ export const LANDING = {
     zoomOutZ: 5,
     panLookAt: { x: 0.5, y: 0.3 },
   },
+  scroll: {
+    sectionCount: 7,
+    snapDuration: 1.5,
+    snapEase: 'power2.inOut',
+    wheelCooldown: 1500,
+    touchThreshold: 50,
+  },
   tree: {
     rootCount: 300,
     rootRadius: 0.15,
