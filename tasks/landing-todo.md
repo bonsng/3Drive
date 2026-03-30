@@ -80,6 +80,24 @@
 
 **→ Phase 4 완료 후 유저 확인**
 
+## Phase 4.5: 섹션별 3D 효과 보완
+
+> 상세 계획: `docs/plans/phase4.5-effects-polish-plan.md`
+
+- [x] Step 1: 스크롤 스냅
+  - [x] ScrollTrigger `snap: 1/6` 옵션 추가 (섹션 단위 스냅)
+- [ ] Step 2: 드래그 애니메이션 재구현
+  - [ ] `drag-trail.ts` — 폴더 전체(300개 파티클) 드래그 대상으로 변경
+  - [ ] `drag-trail.ts` — 도착 좌표를 두 번째 폴더 아래 자식 위치로 계산
+  - [ ] `sphere.ts` — 단방향 드래그 (0→1, 되돌아오지 않음) + 글로우 강화
+  - [ ] `tree-lines.ts` — 연결선 3그룹 분리 (static/drag/new), 드래그 시 fade out → 도착 시 새 연결선 fade in
+  - [ ] `scroll-timeline.ts` — 드래그 타이밍 조정 (텍스트 reveal 후 시작, 리셋 tween 제거)
+- [ ] Step 3: 오버레이 위치 & 등장 개선
+  - [ ] ContextMenuOverlay, PreviewOverlay 위치 미세 조정
+  - [ ] 등장 시 translateY 슬라이드업 애니메이션 추가
+
+**→ Phase 4.5 완료 후 유저 확인**
+
 ## Phase 5: 폴리시
 
 - [ ] 모바일 반응형

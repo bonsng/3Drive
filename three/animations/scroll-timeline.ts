@@ -5,12 +5,14 @@ import { landingSceneState } from '../core/landing-scene-state';
 
 gsap.registerPlugin(ScrollTrigger);
 
+const SECTION_COUNT = 7;
+const SEGMENT_COUNT = SECTION_COUNT - 1;
+
 /**
  * 스크롤 컨테이너에 GSAP ScrollTrigger 타임라인을 생성한다.
- * 스크롤 진행도(0~1)에 따라 landingSceneState 값을 tween.
+ * 기본 스크롤을 차단하고 섹션 단위로만 이동.
  *
  * 7개 섹션 = duration 6 (섹션 간 전환 6구간)
- * label: s1→s2 = 0, s2→s3 = 1, ... s6→s7 = 5
  */
 export function createScrollTimeline(container: HTMLElement) {
   const tl = gsap.timeline({
@@ -28,7 +30,6 @@ export function createScrollTimeline(container: HTMLElement) {
   tl.to(landingSceneState, { morphProgress: 1, duration: 1 }, 0);
   tl.to(landingSceneState.camera, { ...CAM.treeView, duration: 0.6 }, 0.4);
   tl.to(landingSceneState.lookAt, { ...CAM.treeViewLookAt, duration: 0.6 }, 0.4);
-  // 연결선: 섹션 2 텍스트가 중간에 왔을 때 fade in (0.7~1.0 구간)
   tl.to(landingSceneState, { treeLinesOpacity: 1, duration: 0.3 }, 0.7);
 
   // Section 2→3: 트리 유지, dragProgress 시작
@@ -55,9 +56,73 @@ export function createScrollTimeline(container: HTMLElement) {
   tl.to(landingSceneState, { treeLinesOpacity: 0, duration: 0.3 }, 5);
   tl.to(landingSceneState, { morphProgress: 0, duration: 1 }, 5);
 
+  // --- 섹션 단위 스크롤 (기본 스크롤 차단) ---
+  let currentSection = 0;
+  let isAnimating = false;
+  const scrollProxy = { y: 0 };
+
+  function getScrollMax() {
+    return container.scrollHeight - window.innerHeight;
+  }
+
+  function goToSection(index: number) {
+    currentSection = Math.max(0, Math.min(index, SEGMENT_COUNT));
+    isAnimating = true;
+    const target = (currentSection / SEGMENT_COUNT) * getScrollMax();
+    scrollProxy.y = window.scrollY;
+    gsap.to(scrollProxy, {
+      y: target,
+      duration: 0.8,
+      ease: 'power2.inOut',
+      onUpdate() {
+        window.scrollTo(0, scrollProxy.y);
+      },
+      onComplete() {
+        isAnimating = false;
+      },
+    });
+  }
+
+  let wheelCooldown = false;
+
+  function onWheel(e: WheelEvent) {
+    e.preventDefault();
+    if (isAnimating || wheelCooldown) return;
+    wheelCooldown = true;
+    setTimeout(() => {
+      wheelCooldown = false;
+    }, 1500);
+    if (e.deltaY > 0) goToSection(currentSection + 1);
+    else if (e.deltaY < 0) goToSection(currentSection - 1);
+  }
+
+  let touchStartY = 0;
+  function onTouchStart(e: TouchEvent) {
+    touchStartY = e.touches[0].clientY;
+  }
+  function onTouchMove(e: TouchEvent) {
+    e.preventDefault();
+  }
+  function onTouchEnd(e: TouchEvent) {
+    if (isAnimating) return;
+    const delta = touchStartY - e.changedTouches[0].clientY;
+    if (Math.abs(delta) < 50) return;
+    if (delta > 0) goToSection(currentSection + 1);
+    else goToSection(currentSection - 1);
+  }
+
+  window.addEventListener('wheel', onWheel, { passive: false });
+  window.addEventListener('touchstart', onTouchStart, { passive: true });
+  window.addEventListener('touchmove', onTouchMove, { passive: false });
+  window.addEventListener('touchend', onTouchEnd, { passive: true });
+
   return {
     timeline: tl,
     kill() {
+      window.removeEventListener('wheel', onWheel);
+      window.removeEventListener('touchstart', onTouchStart);
+      window.removeEventListener('touchmove', onTouchMove);
+      window.removeEventListener('touchend', onTouchEnd);
       tl.scrollTrigger?.kill();
       tl.kill();
     },
