@@ -111,9 +111,10 @@ export function createParticleSphere(scene: Scene, options: ParticleSphereOption
   const dragDest = vec3(dragTargetPos.x, dragTargetPos.y.add(arcY), dragTargetPos.z);
   const finalPos = mix(rotatedPos, dragDest, dragT);
 
-  // Drag 중인 파티클은 크기/밝기 증가
-  const sizeScale = float(1).add(dragT.mul(1.5));
-  const glowColor = mix(color(SPHERE.color), color(0xaaccff), dragT.mul(0.6));
+  // Drag 중인 파티클은 이동 중 글로우, 도착 시 해제 (sin 커브)
+  const glowT = sin(dragT.mul(Math.PI));
+  const sizeScale = float(1).add(glowT.mul(2.0));
+  const glowColor = mix(color(SPHERE.color), color(0xccddff), glowT.mul(0.8));
 
   // Material
   const material = new PointsNodeMaterial({

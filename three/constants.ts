@@ -65,4 +65,14 @@ export const LANDING = {
     fileDistance: 0.8,
     fileRadius: 0.15,
   },
+  drag: {
+    nodeIndices: [1, 2, 3, 4] as number[],
+    targetFolderIndex: 17,
+    destCenter: [-2.13, 0.38, -2.88] as [number, number, number],
+    destFiles: [
+      [-1.53, 0.38, -2.35],
+      [-2.72, -0.16, -2.88],
+      [-2.08, 0.97, -3.41],
+    ] as [number, number, number][],
+  },
 } as const;

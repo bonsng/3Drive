@@ -33,11 +33,10 @@ export function createScrollTimeline(
   tl.to(landingSceneState.lookAt, { ...CAM.treeViewLookAt, duration: 0.6 }, 0.4);
   tl.to(landingSceneState, { treeLinesOpacity: 1, duration: 0.3 }, 0.7);
 
-  // Section 2→3: 드래그 시작
+  // Section 2→3: 드래그 시작 (단방향, 섹션 전체 사용)
   tl.to(landingSceneState, { dragProgress: 1, duration: 1 }, 1);
 
-  // Section 3→4: 드래그 리셋 + 줌인 + 컨텍스트 메뉴
-  tl.to(landingSceneState, { dragProgress: 0, duration: 0.5 }, 2);
+  // Section 3→4: 드래그 완료 상태 유지 + 줌인 + 컨텍스트 메뉴
   tl.to(landingSceneState.camera, { x: 0, y: 0, z: CAM.zoomInZ, duration: 1 }, 2);
   tl.to(landingSceneState.lookAt, { x: 0, y: 0, z: 0, duration: 0.5 }, 2);
   tl.to(landingSceneState, { contextMenuOpacity: 1, duration: 0.5 }, 2.3);

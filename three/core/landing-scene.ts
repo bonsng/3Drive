@@ -45,7 +45,7 @@ export function createLandingScene(canvas: HTMLCanvasElement) {
     sphere.uniforms.morphProgress.value = landingSceneState.morphProgress;
     sphere.uniforms.dragProgress.value = landingSceneState.dragProgress;
 
-    treeLines.update(landingSceneState.treeLinesOpacity);
+    treeLines.update(landingSceneState.treeLinesOpacity, landingSceneState.dragProgress);
 
     // Sync state → camera (orbitTheta로 XZ 평면 공전)
     const { camera: cam, lookAt, orbitTheta } = landingSceneState;
