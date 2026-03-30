@@ -8,15 +8,27 @@ interface OverlayRefs {
   previewRef: RefObject<HTMLDivElement | null>;
 }
 
+interface SectionScrollRefs {
+  onSectionChange: (section: number) => void;
+  goToSectionRef: RefObject<((index: number) => void) | null>;
+}
+
 export function useLandingAnimations(
   containerRef: RefObject<HTMLDivElement | null>,
   overlayRefs: OverlayRefs,
+  sectionScroll?: SectionScrollRefs,
 ) {
   useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
 
-    const { kill: killScroll } = createScrollTimeline(container);
+    const { kill: killScroll, goToSection } = createScrollTimeline(
+      container,
+      sectionScroll?.onSectionChange,
+    );
+    if (sectionScroll) {
+      sectionScroll.goToSectionRef.current = goToSection;
+    }
     const killText = initTextAnimations(container);
 
     let rafId: number;
@@ -36,6 +48,9 @@ export function useLandingAnimations(
       killScroll();
       killText();
       cancelAnimationFrame(rafId);
+      if (sectionScroll) {
+        sectionScroll.goToSectionRef.current = null;
+      }
     };
   }, []);
 }

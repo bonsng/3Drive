@@ -12,7 +12,10 @@ gsap.registerPlugin(ScrollTrigger);
  *
  * 7개 섹션 = duration 6 (섹션 간 전환 6구간)
  */
-export function createScrollTimeline(container: HTMLElement) {
+export function createScrollTimeline(
+  container: HTMLElement,
+  onSectionChange?: (section: number) => void,
+) {
   const tl = gsap.timeline({
     scrollTrigger: {
       trigger: container,
@@ -54,10 +57,11 @@ export function createScrollTimeline(container: HTMLElement) {
   tl.to(landingSceneState, { treeLinesOpacity: 0, duration: 0.3 }, 5);
   tl.to(landingSceneState, { morphProgress: 0, duration: 1 }, 5);
 
-  const killScroll = createSectionScroll(container);
+  const { kill: killScroll, goToSection } = createSectionScroll(container, onSectionChange);
 
   return {
     timeline: tl,
+    goToSection,
     kill() {
       killScroll();
       tl.scrollTrigger?.kill();
