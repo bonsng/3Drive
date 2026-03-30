@@ -13,7 +13,8 @@ export const ContextMenuOverlay = forwardRef<HTMLDivElement>(function ContextMen
   return (
     <div
       ref={ref}
-      className="pointer-events-none fixed top-1/2 right-[18%] z-20 -translate-y-1/2 opacity-0"
+      className="pointer-events-none fixed right-[30%] bottom-1/4 z-20"
+      style={{ opacity: 0 }}
     >
       <div className="w-56 rounded-xl border border-white/20 bg-white/10 p-1.5 shadow-2xl backdrop-blur-xl">
         {menuItems.map((item, i) =>
@@ -22,7 +23,7 @@ export const ContextMenuOverlay = forwardRef<HTMLDivElement>(function ContextMen
           ) : (
             <div
               key={item.label}
-              className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm text-white/80"
+              className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm text-white/80 transition-colors hover:bg-white/10"
             >
               <span className="text-xs">{item.icon}</span>
               <span className="flex-1">{item.label}</span>

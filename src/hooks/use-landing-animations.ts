@@ -1,4 +1,4 @@
-import { useEffect, type RefObject } from 'react';
+import { useCallback, useEffect, useRef, useState, type RefObject } from 'react';
 import { createScrollTimeline } from '../../three/animations/scroll-timeline';
 import { initTextAnimations } from '../pages/landing/animations/text-animations';
 import { landingSceneState } from '../../three/core/landing-scene-state';
@@ -8,27 +8,22 @@ interface OverlayRefs {
   previewRef: RefObject<HTMLDivElement | null>;
 }
 
-interface SectionScrollRefs {
-  onSectionChange: (section: number) => void;
-  goToSectionRef: RefObject<((index: number) => void) | null>;
-}
-
 export function useLandingAnimations(
   containerRef: RefObject<HTMLDivElement | null>,
   overlayRefs: OverlayRefs,
-  sectionScroll?: SectionScrollRefs,
 ) {
+  const [currentSection, setCurrentSection] = useState(0);
+  const goToSectionRef = useRef<((index: number) => void) | null>(null);
+
+  const onSectionChange = useCallback((section: number) => setCurrentSection(section), []);
+  const goToSection = useCallback((index: number) => goToSectionRef.current?.(index), []);
+
   useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
 
-    const { kill: killScroll, goToSection } = createScrollTimeline(
-      container,
-      sectionScroll?.onSectionChange,
-    );
-    if (sectionScroll) {
-      sectionScroll.goToSectionRef.current = goToSection;
-    }
+    const { kill: killScroll, goToSection: go } = createScrollTimeline(container, onSectionChange);
+    goToSectionRef.current = go;
     const killText = initTextAnimations(container);
 
     let rafId: number;
@@ -48,9 +43,9 @@ export function useLandingAnimations(
       killScroll();
       killText();
       cancelAnimationFrame(rafId);
-      if (sectionScroll) {
-        sectionScroll.goToSectionRef.current = null;
-      }
+      goToSectionRef.current = null;
     };
-  }, []);
+  }, [containerRef, onSectionChange, overlayRefs]);
+
+  return { currentSection, goToSection };
 }

@@ -4,7 +4,8 @@ export const PreviewOverlay = forwardRef<HTMLDivElement>(function PreviewOverlay
   return (
     <div
       ref={ref}
-      className="pointer-events-none fixed top-1/2 left-[12%] z-20 -translate-y-1/2 opacity-0"
+      className="pointer-events-none fixed top-1/2 left-[12%] z-20 -translate-y-1/2"
+      style={{ opacity: 0 }}
     >
       <div className="w-72 rounded-xl border border-white/20 bg-white/10 p-4 shadow-2xl backdrop-blur-xl">
         {/* 썸네일 영역 */}
