@@ -11,7 +11,7 @@ export const PreviewOverlay = forwardRef<HTMLDivElement>(function PreviewOverlay
         {/* 썸네일 영역 */}
         <div className="mb-3 aspect-video overflow-hidden rounded-lg bg-gradient-to-br from-blue-500/80 to-purple-500/80">
           <div className="flex h-full flex-col items-center justify-center gap-2">
-            <div className="opacity text-3xl">📄</div>
+            <div className="text-3xl">📄</div>
             <div className="text-xs text-white">미리보기</div>
           </div>
         </div>
