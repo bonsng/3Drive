@@ -45,52 +45,89 @@
 
 ## Phase 2.5: 랜딩페이지 구현(Main Page)
 
-- [ ] landing page todo 참고 (`tasks/landing-todo.md`)
+- [x] landing page todo 참고 (`tasks/landing-todo.md`)
+  - Phase 5(모바일/퍼포먼스 폴리시)는 Drive 완성 후 진행 예정
 
-## Phase 3: Three.js 씬 기본 구축 (WebGPURenderer)
+---
 
-- [ ] `engine.ts` — Scene, Camera, WebGPURenderer 초기화 (async init) + setAnimationLoop
-- [ ] `lights.ts` — AmbientLight, DirectionalLight
-- [ ] `controls.ts` — OrbitControls (`three/addons`)
-- [ ] `ThreeCanvas.tsx` — React ↔ Three.js 브릿지 컴포넌트 (비동기 엔진 초기화)
-- [ ] WebGPU 미지원 브라우저 fallback 처리 (WebGLRenderer)
-- [ ] 빈 씬이 렌더링되는 것 확인
+## Phase 3: 3D 엔진 & 빈 씬 렌더링
 
-## Phase 4: 3D 오브젝트 구현
+> 목표: DrivePage에 Three.js 캔버스가 떠서 빈 씬이 렌더링되는 상태
+> 컨벤션: `three/core/landing-scene.ts` 팩토리 패턴 따름
 
-- [ ] `loaders.ts` — GLTFLoader 유틸리티 + 모델 캐싱
-- [ ] `file-node.ts` — 파일/폴더 구체 오브젝트 생성
-- [ ] 파일 라벨 표시 (CSS 오버레이 or Canvas 텍스트)
-- [ ] 트리 데이터 → 3D 오브젝트 배치 (positioning.ts 연동)
-- [ ] 기본 파일 탐색기 화면 완성 (mock 데이터 로드 → 구체 배치)
+- [x] `three/core/drive-scene.ts` — `createDriveScene(canvas)` 팩토리 함수
+  - [x] Scene + PerspectiveCamera + WebGPURenderer 초기화 (`DRIVEPAGE_CAMERA` 사용)
+  - [x] `renderer.init()` await + `setAnimationLoop` 등록
+  - [x] resize 핸들러 (rAF 디바운스)
+  - [x] OrbitControls 설정 (damping, 줌 제한 등)
+  - [x] `dispose()` 정리 함수
+  - [x] `{ init, dispose, scene, camera, renderer, controls }` 반환
+- [x] `three/core/drive-scene-state.ts` — driveSceneState plain object + 타입
+- [x] Lights 설정 (AmbientLight + DirectionalLight, drive-scene.ts 내부)
+- [x] `src/hooks/use-drive-scene.ts` — React hook (`useLandingScene` 패턴)
+  - [x] canvas ref → `createDriveScene(canvas)` 호출
+  - [x] unmount 시 dispose()
+- [x] `DrivePage.tsx` — fixed canvas + hook 연결, 빈 씬 렌더링 확인
 
-## Phase 5: 인터랙션 구현
+**→ Phase 3 완료 후 유저 확인**
 
-- [ ] `raycaster.ts` — 클릭, 우클릭, 호버 이벤트
-- [ ] 더블클릭 → 폴더 진입 (카메라 이동)
+## Phase 4: 3D 파일 노드 & 트리 시각화
+
+> 목표: mock 데이터로 파일/폴더 구체가 3D 공간에 배치되는 상태
+
+- [ ] `src/three/loaders.ts` — GLTFLoader + 모델 캐싱 (파일/폴더 모델)
+- [ ] `src/three/objects/file-node.ts` — 파일/폴더 3D 오브젝트 생성
+  - [ ] 타입별 모델 로드 (폴더, 이미지, 문서, 비디오 등)
+  - [ ] 호버/선택 상태 시각 피드백
+- [ ] `src/three/scene-manager.ts` — 트리 데이터 → 3D 씬 동기화
+  - [ ] `positioning.ts` 연동하여 Node[] → 3D 배치
+  - [ ] 현재 폴더 기준 자식 노드만 렌더링
+  - [ ] 노드 추가/제거 시 씬 업데이트
+- [ ] 파일 라벨 표시 (CSS2DRenderer 오버레이)
+- [ ] mock 데이터 → 3D 트리 렌더링 확인
+
+**→ Phase 4 완료 후 유저 확인**
+
+## Phase 5: 인터랙션 & 카메라
+
+> 목표: 클릭/드래그/우클릭이 동작하고 카메라 전환이 되는 상태
+
+- [ ] `src/three/raycaster.ts` — Raycaster 이벤트 시스템
+  - [ ] 클릭 (파일 선택)
+  - [ ] 더블클릭 (폴더 진입)
+  - [ ] 우클릭 (컨텍스트 메뉴 트리거)
+  - [ ] 호버 (커서 변경 + 하이라이트)
+- [ ] `src/three/camera-animator.ts` — GSAP 기반 카메라 애니메이션
+  - [ ] 폴더 진입/이탈 시 카메라 이동
+  - [ ] 앵글 프리셋 전환 (`constants/camera-angles.ts` 연동)
 - [ ] 드래그앤드롭 (파일 → 폴더 이동)
-- [ ] `camera-animator.ts` — GSAP 기반 카메라 전환 (앵글 프리셋)
-- [ ] 컨텍스트 메뉴 연동 (3D 우클릭 → Zustand → React UI)
-- [ ] 검색 기능 (SearchBar → 트리 필터 → 3D 씬 업데이트)
+  - [ ] 드래그 시작/이동/종료 처리
+  - [ ] 드롭 대상 폴더 하이라이트
 
-## Phase 6: 페이지 완성
+**→ Phase 5 완료 후 유저 확인**
 
-- [ ] DrivePage — ThreeCanvas + SideNav + SearchBar + 모달 + 가이드 모달 통합
-- [ ] HomePage — 랜딩 페이지 (DrivePage로 진입하는 CTA)
+## Phase 6: UI 레이아웃 & 페이지 조립
 
-## Phase 7: 마무리
+> 목표: DrivePage에 모든 UI 요소가 통합된 상태
 
-- [ ] 백엔드 API 응답에서 trash를 별도 필드로 분리 (`{ root: BackendNode, trash: BackendNode[] }`)
-  - 프론트에서 `'휴지통'` 매직 스트링 검색 제거, `processBackendTree` 단순화
-- [ ] 휴지통 3D 씬 (trash-zone 오브젝트 + 삭제/복원)
-- [ ] 포스트프로세싱 (TSL 노드 기반, 필요한 경우만)
-- [ ] 반응형 처리 (resize → camera.aspect + renderer.setSize)
+- [ ] `src/stores/ui-store.ts` — Zustand (사이드바, 검색, 컨텍스트 메뉴, 로딩)
+- [ ] `src/components/layout/SideNav.tsx` — 사이드 네비게이션
+- [ ] `src/components/layout/GlobalNav.tsx` — 상단 네비게이션
+- [ ] `src/components/search/SearchBar.tsx` — 검색 바
+  - [ ] 트리 필터 → 3D 씬 업데이트
+- [ ] `src/components/context-menu/ContextMenu.tsx` — 우클릭 메뉴
+  - [ ] 3D 우클릭 → Zustand → React UI 연동
+- [ ] DrivePage 최종 조립 (ThreeCanvas + SideNav + SearchBar + 모달)
+
+**→ Phase 6 완료 후 유저 확인**
+
+## Phase 7: 마무리 & 폴리시
+
+- [ ] 휴지통 (trash-zone 오브젝트 + 삭제/복원)
 - [ ] 키보드 단축키 (Cmd/Ctrl+F 검색 등)
 - [ ] 온보딩/가이드 모달
+- [ ] 반응형 처리 (resize, 모바일 대응)
+- [ ] 퍼포먼스 최적화 (pixelRatio 제한, 디바이스 기반 조절)
 - [ ] Three.js 메모리 관리 점검 (dispose 누락 확인)
 - [ ] 페이지 이동 시 씬 cleanup 확인
-
-## Remains
-
-- [ ] App.tsx 레이아웃 (GlobalNav)
-- [ ] Zustand 스토어: `ui-store.ts` (사이드바, 검색, 컨텍스트 메뉴, 로딩, 배경)
+- [ ] `bun run build` 빌드 성공 확인
