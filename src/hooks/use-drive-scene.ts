@@ -2,24 +2,20 @@ import { type RefObject, useEffect, useRef } from 'react';
 import { createDriveScene } from '../../three/core/drive-scene';
 
 export function useDriveScene(canvasRef: RefObject<HTMLCanvasElement | null>) {
-  const driveRef = useRef<ReturnType<typeof createDriveScene> | null>(null);
+  const driveSceneRef = useRef<ReturnType<typeof createDriveScene> | null>(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    let cancelled = false;
-    const drive = createDriveScene(canvas);
-    driveRef.current = drive;
+    const driveScene = createDriveScene(canvas);
+    driveSceneRef.current = driveScene;
 
-    drive.init().then(() => {
-      if (cancelled) drive.dispose();
-    });
+    driveScene.init().catch(console.error);
 
     return () => {
-      cancelled = true;
-      drive.dispose();
-      driveRef.current = null;
+      driveScene.dispose();
+      driveSceneRef.current = null;
     };
   }, [canvasRef]);
 }
