@@ -1,5 +1,7 @@
 import { type RefObject, useEffect, useRef } from 'react';
 import { createDriveScene } from '../../three/core/drive-scene';
+import { processBackendResponse } from '@/lib/tree-transform';
+import { mockBackendResponse } from '@/mocks/data';
 
 export function useDriveScene(canvasRef: RefObject<HTMLCanvasElement | null>) {
   const driveSceneRef = useRef<ReturnType<typeof createDriveScene> | null>(null);
@@ -11,7 +13,13 @@ export function useDriveScene(canvasRef: RefObject<HTMLCanvasElement | null>) {
     const driveScene = createDriveScene(canvas);
     driveSceneRef.current = driveScene;
 
-    driveScene.init().catch(console.error);
+    driveScene
+      .init()
+      .then(async () => {
+        const { treeData } = processBackendResponse(mockBackendResponse);
+        await driveScene.sceneManager.renderTree(treeData, treeData.id);
+      })
+      .catch(console.error);
 
     return () => {
       driveScene.dispose();

@@ -9,6 +9,7 @@ import {
 import { OrbitControls } from 'three/addons';
 import { DRIVEPAGE_CAMERA } from '../constants/camera';
 import { MAX_PIXEL_RATIO } from '../constants/renderer';
+import { SceneManager } from '../objects/scene-manager';
 
 export function createDriveScene(canvas: HTMLCanvasElement) {
   // ── Scene ──────────────────────────────────────────────
@@ -44,6 +45,9 @@ export function createDriveScene(canvas: HTMLCanvasElement) {
   controls.minDistance = 2;
   controls.maxDistance = 30;
 
+  // ── Scene Manager ──────────────────────────────────────
+  const sceneManager = new SceneManager(scene);
+
   // ── Animation Loop ─────────────────────────────────────
   function animate() {
     controls.update();
@@ -78,9 +82,10 @@ export function createDriveScene(canvas: HTMLCanvasElement) {
     cancelAnimationFrame(resizeTimeout);
     renderer.setAnimationLoop(null);
     window.removeEventListener('resize', onResize);
+    sceneManager.dispose();
     controls.dispose();
     renderer.dispose();
   }
 
-  return { init, dispose, scene, camera, renderer, controls };
+  return { init, dispose, scene, camera, renderer, controls, sceneManager };
 }
