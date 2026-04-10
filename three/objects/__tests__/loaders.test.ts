@@ -1,11 +1,11 @@
 /**
- * loaders.ts
+ * model-map.ts
  * 1. getModelPath returns correct sphere model path for each FileType
  * 2. getModelPath returns fallback path for unknown types
  * 3. getModelPath returns folder model for 'folder' type
  */
 import { describe, it, expect } from 'vitest';
-import { getModelPath } from '../loaders';
+import { getModelPath } from '../../constants/model-map';
 
 describe('getModelPath', () => {
   it.each([
