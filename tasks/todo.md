@@ -76,7 +76,16 @@
 > 목표: mock 데이터로 파일/폴더 구체가 3D 공간에 배치되는 상태
 > Plan: `docs/plans/phase4-file-node-tree-visualization-plan.md`
 
-**→ Phase 4 완료 후 유저 확인**
+- [x] Node 타입에 `extension` 필드 추가 + normalizeBackendTree 보존 + 테스트
+- [x] Pretendard Bold subset 폰트 생성 + @font-face + preload
+- [x] `three/constants.ts` → `three/constants/` 디렉토리 분리 (배럴 패턴 제거)
+- [x] `three/objects/loaders.ts` — GLTFLoader + 캐싱, `getModelPath`는 `constants/model-map.ts`로 분리
+- [x] `three/objects/file-node.ts` — Sprite 텍스트 라벨, 폰트 상수는 `constants/label.ts`로 분리
+- [x] `three/objects/scene-manager.ts` — SceneManager (InstancedMesh + 라벨 + 연결선), 순수 함수는 `scene-utils.ts`로 분리, 상수는 `constants/scene.ts`로 분리
+- [x] `three/core/drive-scene.ts` + `src/hooks/use-drive-scene.ts` — SceneManager 통합 + mock 데이터 렌더링
+- [x] Visual verification — 라벨 크기/위치 튜닝, 테스트 85/85, 빌드/lint 통과
+
+**→ Phase 4 완료 ✓ 유저 확인 완료**
 
 ## Phase 5: 인터랙션 & 카메라
 
