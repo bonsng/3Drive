@@ -7,6 +7,7 @@ export interface Node {
   isHidden?: boolean;
   createdAt?: string;
   updatedAt?: string;
+  extension?: string | null;
 }
 
 export interface BackendNode {

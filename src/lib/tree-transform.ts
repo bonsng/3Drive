@@ -11,6 +11,7 @@ export const normalizeBackendTree = (rawNode: BackendNode): Node => {
     parentId: rawNode.parentId,
     createdAt: rawNode.createdAt,
     updatedAt: rawNode.updatedAt,
+    extension: rawNode.extension,
     children: Array.isArray(rawNode.children) ? rawNode.children.map(normalizeBackendTree) : [],
   };
 };
