@@ -7,7 +7,8 @@ import {
   WebGPURenderer,
 } from 'three/webgpu';
 import { OrbitControls } from 'three/addons';
-import { DRIVEPAGE_CAMERA, MAX_PIXEL_RATIO } from '../constants';
+import { DRIVEPAGE_CAMERA } from '../constants/camera';
+import { MAX_PIXEL_RATIO } from '../constants/renderer';
 
 export function createDriveScene(canvas: HTMLCanvasElement) {
   // ── Scene ──────────────────────────────────────────────

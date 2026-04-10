@@ -1,4 +1,4 @@
-import { HOMEPAGE_CAMERA } from '../constants';
+import { HOMEPAGE_CAMERA } from '../constants/camera';
 
 const [camX, camY, camZ] = HOMEPAGE_CAMERA.position;
 

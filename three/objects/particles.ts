@@ -6,7 +6,7 @@ import {
   Sprite,
 } from 'three/webgpu';
 import { color, float, instancedBufferAttribute, sin, uniform, vec3 } from 'three/tsl';
-import { LANDING } from '../constants';
+import { LANDING } from '../constants/landing';
 import { randomPositions, randomSeeds } from '../utils/geometry';
 import { circleMask } from '../utils/tsl';
 

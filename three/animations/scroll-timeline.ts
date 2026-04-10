@@ -1,6 +1,6 @@
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { LANDING } from '../constants';
+import { LANDING } from '../constants/landing';
 import { landingSceneState } from '../core/landing-scene-state';
 import { createSectionScroll } from './section-scroll';
 

@@ -5,7 +5,7 @@
  * 3. getModelPath returns folder model for 'folder' type
  */
 import { describe, it, expect } from 'vitest';
-import { getModelPath } from '../../constants';
+import { getModelPath } from '../../constants/model-map';
 
 describe('getModelPath', () => {
   it.each([

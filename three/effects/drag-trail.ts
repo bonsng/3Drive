@@ -1,4 +1,4 @@
-import { LANDING } from '../constants';
+import { LANDING } from '../constants/landing';
 import type { TreeLayout } from '../objects/tree-layout';
 
 const { tree: TREE, sphere: SPHERE, drag: DRAG } = LANDING;

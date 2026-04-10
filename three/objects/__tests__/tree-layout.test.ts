@@ -12,7 +12,7 @@
  */
 import { describe, it, expect } from 'vitest';
 import { createTreeLayout } from '../tree-layout';
-import { LANDING } from '../../constants';
+import { LANDING } from '../../constants/landing';
 
 const { tree: TREE } = LANDING;
 const COUNT = 2000;

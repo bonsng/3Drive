@@ -5,7 +5,7 @@ import {
   LineSegments,
   Scene,
 } from 'three/webgpu';
-import { LANDING } from '../constants';
+import { LANDING } from '../constants/landing';
 import type { TreeNode } from './tree-layout';
 
 const { drag: DRAG } = LANDING;
