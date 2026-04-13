@@ -1,7 +1,7 @@
 /**
  * normalizeBackendTree
  * 1. id resolution: folderId → fileId → -1 fallback
- * 2. Field mapping: name, type, parentId, createdAt, updatedAt
+ * 2. Field mapping: name, type, parentId, createdAt, updatedAt, extension
  * 3. Children normalization: null/undefined → empty array, recursive conversion
  *
  * processBackendResponse
@@ -64,6 +64,26 @@ describe('normalizeBackendTree', () => {
   it('should convert undefined children to empty array', () => {
     const result = normalizeBackendTree(makeBackendNode({ children: undefined }));
     expect(result.children).toEqual([]);
+  });
+
+  it('should preserve extension field from BackendNode', () => {
+    const result = normalizeBackendTree(
+      makeBackendNode({
+        folderId: null,
+        fileId: 10,
+        type: 'file',
+        name: 'test.pdf',
+        extension: 'pdf',
+      }),
+    );
+    expect(result.extension).toBe('pdf');
+  });
+
+  it('should set extension to undefined when not present', () => {
+    const result = normalizeBackendTree(
+      makeBackendNode({ folderId: 1, type: 'folder', name: 'docs' }),
+    );
+    expect(result.extension).toBeUndefined();
   });
 
   it('should recursively normalize children', () => {

@@ -1,4 +1,4 @@
-import { DRIVEPAGE_CAMERA } from '../constants';
+import { DRIVEPAGE_CAMERA } from '../constants/camera';
 
 const [camX, camY, camZ] = DRIVEPAGE_CAMERA.position;
 

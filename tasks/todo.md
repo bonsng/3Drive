@@ -74,19 +74,18 @@
 ## Phase 4: 3D 파일 노드 & 트리 시각화
 
 > 목표: mock 데이터로 파일/폴더 구체가 3D 공간에 배치되는 상태
+> Plan: `docs/plans/phase4-file-node-tree-visualization-plan.md`
 
-- [ ] `src/three/loaders.ts` — GLTFLoader + 모델 캐싱 (파일/폴더 모델)
-- [ ] `src/three/objects/file-node.ts` — 파일/폴더 3D 오브젝트 생성
-  - [ ] 타입별 모델 로드 (폴더, 이미지, 문서, 비디오 등)
-  - [ ] 호버/선택 상태 시각 피드백
-- [ ] `src/three/scene-manager.ts` — 트리 데이터 → 3D 씬 동기화
-  - [ ] `positioning.ts` 연동하여 Node[] → 3D 배치
-  - [ ] 현재 폴더 기준 자식 노드만 렌더링
-  - [ ] 노드 추가/제거 시 씬 업데이트
-- [ ] 파일 라벨 표시 (CSS2DRenderer 오버레이)
-- [ ] mock 데이터 → 3D 트리 렌더링 확인
+- [x] Node 타입에 `extension` 필드 추가 + normalizeBackendTree 보존 + 테스트
+- [x] Pretendard Bold subset 폰트 생성 + @font-face + preload
+- [x] `three/constants.ts` → `three/constants/` 디렉토리 분리 (배럴 패턴 제거)
+- [x] `three/objects/loaders.ts` — GLTFLoader + 캐싱, `getModelPath`는 `constants/model-map.ts`로 분리
+- [x] `three/objects/file-node.ts` — Sprite 텍스트 라벨, 폰트 상수는 `constants/label.ts`로 분리
+- [x] `three/objects/scene-manager.ts` — SceneManager (InstancedMesh + 라벨 + 연결선), 순수 함수는 `scene-utils.ts`로 분리, 상수는 `constants/scene.ts`로 분리
+- [x] `three/core/drive-scene.ts` + `src/hooks/use-drive-scene.ts` — SceneManager 통합 + mock 데이터 렌더링
+- [x] Visual verification — 라벨 크기/위치 튜닝, 테스트 85/85, 빌드/lint 통과
 
-**→ Phase 4 완료 후 유저 확인**
+**→ Phase 4 완료 ✓ 유저 확인 완료**
 
 ## Phase 5: 인터랙션 & 카메라
 

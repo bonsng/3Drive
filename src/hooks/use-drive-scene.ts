@@ -1,25 +1,29 @@
 import { type RefObject, useEffect, useRef } from 'react';
 import { createDriveScene } from '../../three/core/drive-scene';
+import { processBackendResponse } from '@/lib/tree-transform';
+import { mockBackendResponse } from '@/mocks/data';
 
 export function useDriveScene(canvasRef: RefObject<HTMLCanvasElement | null>) {
-  const driveRef = useRef<ReturnType<typeof createDriveScene> | null>(null);
+  const driveSceneRef = useRef<ReturnType<typeof createDriveScene> | null>(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    let cancelled = false;
-    const drive = createDriveScene(canvas);
-    driveRef.current = drive;
+    const driveScene = createDriveScene(canvas);
+    driveSceneRef.current = driveScene;
 
-    drive.init().then(() => {
-      if (cancelled) drive.dispose();
-    });
+    driveScene
+      .init()
+      .then(async () => {
+        const { treeData } = processBackendResponse(mockBackendResponse);
+        await driveScene.sceneManager.renderTree(treeData, treeData.id);
+      })
+      .catch(console.error);
 
     return () => {
-      cancelled = true;
-      drive.dispose();
-      driveRef.current = null;
+      driveScene.dispose();
+      driveSceneRef.current = null;
     };
   }, [canvasRef]);
 }

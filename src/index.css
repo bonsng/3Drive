@@ -3,6 +3,13 @@
 @import 'shadcn/tailwind.css';
 @import '@fontsource-variable/geist';
 
+@font-face {
+  font-family: 'Pretendard';
+  src: url('/fonts/Pretendard-Bold.subset.woff2') format('woff2');
+  font-weight: 700;
+  font-display: swap;
+}
+
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {

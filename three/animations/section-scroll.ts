@@ -1,5 +1,5 @@
 import gsap from 'gsap';
-import { LANDING } from '../constants';
+import { LANDING } from '../constants/landing';
 import { listenScrollDirection } from '../utils/scroll-direction';
 
 const { sectionCount, snapDuration, snapEase, wheelCooldown, touchThreshold } = LANDING.scroll;

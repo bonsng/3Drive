@@ -1,5 +1,7 @@
 import { Color, PerspectiveCamera, Scene, Vector2, Vector3, WebGPURenderer } from 'three/webgpu';
-import { HOMEPAGE_CAMERA, LANDING, MAX_PIXEL_RATIO } from '../constants';
+import { HOMEPAGE_CAMERA } from '../constants/camera';
+import { LANDING } from '../constants/landing';
+import { MAX_PIXEL_RATIO } from '../constants/renderer';
 import { createParticleSphere } from '../objects/sphere';
 import { createAmbientParticles } from '../objects/particles';
 import { createTreeLayout } from '../objects/tree-layout';

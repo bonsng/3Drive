@@ -1,4 +1,4 @@
-import { LANDING } from '../constants';
+import { LANDING } from '../constants/landing';
 import { fibonacciSphere } from '../utils/geometry';
 
 const { tree: TREE } = LANDING;

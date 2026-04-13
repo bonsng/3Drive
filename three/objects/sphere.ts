@@ -16,7 +16,7 @@ import {
   uniform,
   vec3,
 } from 'three/tsl';
-import { LANDING } from '../constants';
+import { LANDING } from '../constants/landing';
 import { fibonacciSphere } from '../utils/geometry';
 import { circleMask } from '../utils/tsl';
 import type { DragData } from '../effects/drag-trail';
